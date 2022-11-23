@@ -1,0 +1,38 @@
+$background-green: #0F560F;
+$play-area-green: rgb(155, 186, 90);
+$snake-body-gray: rgb(66, 66, 66);
+
+div {
+    width: 20px;
+    height: 20px;
+}
+
+#stage-background {
+    width: fit-content;
+    height: fit-content;
+}
+
+.stage-column {
+    width: fit-content;
+    height: fit-content;
+    float: left;
+    background-color: $play-area-green;
+}
+
+.empty-cell {
+    background-color: $play-area-green;
+    border-radius: 0px;
+    border: 3px solid $play-area-green;
+}
+
+.snake-body-cell {
+    margin: auto;
+    background-color: $snake-body-gray;
+    border-radius: 5px;
+    border: 3px solid $snake-body-gray;
+}
+
+.food-cell {
+    background-image: radial-gradient(red 40%, $play-area-green 40%);
+    border: 3px solid $play-area-green;
+}
