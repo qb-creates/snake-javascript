@@ -1,8 +1,17 @@
 export default class MonoBehaviour {
     constructor() {
-        setInterval(() => {
-            this.Update();
+        setTimeout(() => {
+            this.Start();            
         }, 1000);
+        setTimeout(() => {
+            setInterval(() => {
+                this.Update();
+            }, 100);
+        }, 3000);
+    }
+
+    Start() {
+
     }
 
     Update() {
