@@ -36,6 +36,5 @@ export default class SnakeMovement extends MonoBehaviour {
         if (this.tailIndex == this.snake.length) {
             this.tailIndex = 0;
         }
-        console.log("This is a snake movement test.");
     }
 }
