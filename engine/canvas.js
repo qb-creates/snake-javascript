@@ -25,7 +25,7 @@ export class Canvas {
             this.stageGrid[x][y].className = cell;
         }
         catch (error) {
-            console.log(error);
+            //console.log(error);
         }
     }
 }
