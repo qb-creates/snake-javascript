@@ -1,8 +1,8 @@
-export default class Canvas {
+export class Canvas {
     static stageGrid = [];
 
     static initialize() {
-        
+
         // Draw Stage
         for (let i = 0; i < 19; i++) {
             const stageColumn = document.createElement("div");
@@ -19,12 +19,12 @@ export default class Canvas {
             document.getElementById("stage-background").appendChild(stageColumn);
         }
     }
-    static getInfo(x, y, cell) {
-        try {
-            this.stageGrid[x][y].className = cell;            
-        }
-        catch (error ) {
 
+    static updatePixel(x, y, cell) {
+        try {
+            this.stageGrid[x][y].className = cell;
+        }
+        catch (error) {
             console.log(error);
         }
     }

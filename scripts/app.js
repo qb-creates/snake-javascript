@@ -1,5 +1,5 @@
 
-import Canvas from "./canvas.js";
+import { Canvas } from "../engine/qbcreates-js-engine.js";
 import SnakeController from "./snake/snake-controller.js";
 import SnakeMovement from "./snake/snake-movement.js";
 

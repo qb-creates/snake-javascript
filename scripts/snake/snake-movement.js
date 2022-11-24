@@ -1,5 +1,4 @@
-import Canvas from "../canvas.js";
-import MonoBehaviour from "../MonoBehaviour.js";
+import { MonoBehaviour, Canvas, Time } from "../../engine/qbcreates-js-engine.js";
 
 const emptyCell = 'empty-cell';
 const snakeBodyCell = 'snake-body-cell';
@@ -9,8 +8,8 @@ export default class SnakeMovement extends MonoBehaviour {
     #left = 1;
     #tailIndex = 0;
     #headIndex = 2;
-
-
+    #playerMoveTime = .1;
+    #movePlayerTimer = 0;
 
     set left(newLeft) {
         this.#left = newLeft
@@ -21,29 +20,34 @@ export default class SnakeMovement extends MonoBehaviour {
     }
 
     Start() {
-         console.log("start test");
          // Draw Player
          for (let i = 0; i < this.#snake.length; i++) {
-            Canvas.getInfo(this.#snake[i][0], this.#snake[i][1], "snake-body-cell");
+            Canvas.updatePixel(this.#snake[i][0], this.#snake[i][1], "snake-body-cell");
         }
     }
 
-    Update() {
-        console.log("")
-        let tailX = this.#snake[this.#tailIndex][0];
-        let tailY = this.#snake[this.#tailIndex][1];
-        let headX = this.#snake[this.#headIndex][0] + this.#left;
-        let headY = this.#snake[this.#headIndex][1] + this.#up;
+    FixedUpdate() {
+        this.#movePlayerTimer += Time.fixedDeltaTime;
 
-        Canvas.getInfo(tailX, tailY, emptyCell);
-        this.#snake[this.#tailIndex][0] = headX;
-        this.#snake[this.#tailIndex][1] = headY;
+        if (this.#movePlayerTimer >= this.#playerMoveTime) {
+            let tailX = this.#snake[this.#tailIndex][0];
+            let tailY = this.#snake[this.#tailIndex][1];
+            let headX = this.#snake[this.#headIndex][0] + this.#left;
+            let headY = this.#snake[this.#headIndex][1] + this.#up;
+            
+            Canvas.updatePixel(tailX, tailY, emptyCell);
+            this.#snake[this.#tailIndex][0] = headX;
+            this.#snake[this.#tailIndex][1] = headY;
+            
+            Canvas.updatePixel(headX, headY, snakeBodyCell);
+            this.#headIndex = this.#tailIndex;
+            this.#tailIndex = this.#tailIndex + 1;
+            
+            if (this.#tailIndex == this.#snake.length) {
+                this.#tailIndex = 0;
+            }
 
-        Canvas.getInfo(headX, headY, snakeBodyCell);
-        this.#headIndex = this.#tailIndex;
-        this.#tailIndex = this.#tailIndex + 1;
-        if (this.#tailIndex == this.#snake.length) {
-            this.#tailIndex = 0;
+            this.#movePlayerTimer = 0;
         }
     }
 }

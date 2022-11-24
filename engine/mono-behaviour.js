@@ -1,12 +1,15 @@
-export default class MonoBehaviour {
+import { Time } from "./time.js";
+
+export class MonoBehaviour {
     constructor() {
         setTimeout(() => {
             this.Start();            
         }, 1000);
+        
         setTimeout(() => {
             setInterval(() => {
-                this.Update();
-            }, 100);
+                this.FixedUpdate();
+            }, Time.fixedDeltaTime * 1000);
         }, 3000);
     }
 
@@ -14,7 +17,7 @@ export default class MonoBehaviour {
 
     }
 
-    Update() {
-        console.log("This is a test");
+    FixedUpdate() {
+
     }
 }
