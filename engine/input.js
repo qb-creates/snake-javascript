@@ -37,6 +37,7 @@ export class Input {
             if (event.repeat) {
                 return;
             }
+            
             if (Object.hasOwn(this.#KeyDown, event.key)) {
                 this.#KeyDown[event.key].keyUp = false;
                 this.#KeyDown[event.key].keyDown = true;
