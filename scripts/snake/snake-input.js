@@ -14,20 +14,20 @@ export default class SnakeInput extends MonoBehaviour{
 
     update() {
         if (Input.getKeyDown(KeyCode.w) && this.#previousKey != KeyCode.w) {
-            this.#snakeMovement.up = 1;
-            this.#snakeMovement.left = 0;
+            this.#snakeMovement.verticalAxis = 1;
+            this.#snakeMovement.horizontalAxis = 0;
             this.#previousKey = KeyCode.w;
         } else if (Input.getKeyDown(KeyCode.s) && this.#previousKey != KeyCode.s) {
-            this.#snakeMovement.up = -1;
-            this.#snakeMovement.left = 0;
+            this.#snakeMovement.verticalAxis = -1;
+            this.#snakeMovement.horizontalAxis = 0;
             this.#previousKey = KeyCode.s;
         } else if (Input.getKeyDown(KeyCode.a) && this.#previousKey != KeyCode.a) {
-            this.#snakeMovement.up = 0;
-            this.#snakeMovement.left = -1;
+            this.#snakeMovement.verticalAxis = 0;
+            this.#snakeMovement.horizontalAxis = -1;
             this.#previousKey = KeyCode.a;
         } else if (Input.getKeyDown(KeyCode.d) && this.#previousKey != KeyCode.d) {
-            this.#snakeMovement.up = 0;
-            this.#snakeMovement.left = 1;
+            this.#snakeMovement.verticalAxis = 0;
+            this.#snakeMovement.horizontalAxis = 1;
             this.#previousKey = KeyCode.d;
         }
     }

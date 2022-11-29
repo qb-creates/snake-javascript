@@ -1,19 +1,19 @@
 import { MonoBehaviour, Time } from "../../engine/qbcreates-js-engine.js";
 
 export default class SnakeMovement extends MonoBehaviour {
-    #up = 0;
-    #left = 1;
+    #verticalAxis = 0;
+    #horizontalAxis = 1;
     #tailIndex = 0;
     #headIndex = 2;
     #playerMoveTime = .1;
     #movePlayerTimer = 0;
     
-    set left(newLeft) {
-        this.#left = newLeft
+    set horizontalAxis(newHorizontalAxis) {
+        this.#horizontalAxis = newHorizontalAxis
     }
     
-    set up(newUp) {
-        this.#up = newUp;
+    set verticalAxis(newVerticalAxis) {
+        this.#verticalAxis = newVerticalAxis;
     }
 
     awake() {
@@ -24,12 +24,12 @@ export default class SnakeMovement extends MonoBehaviour {
 
     }
 
-    fixedUpdate() {
+    update() {
         this.#movePlayerTimer += Time.fixedDeltaTime;
 
         if (this.#movePlayerTimer >= this.#playerMoveTime) {
-            let headX = this.gameObject.position[this.#headIndex][0] + this.#left;
-            let headY = this.gameObject.position[this.#headIndex][1] + this.#up;
+            let headX = this.gameObject.position[this.#headIndex][0] + this.#horizontalAxis;
+            let headY = this.gameObject.position[this.#headIndex][1] + this.#verticalAxis;
 
             this.gameObject.position[this.#tailIndex][0] = headX;
             this.gameObject.position[this.#tailIndex][1] = headY;

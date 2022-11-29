@@ -1,32 +1,55 @@
 import { Time } from "./time.js";
 
-const emptyCell = 'empty-cell';
-const snakeBodyCell = 'snake-body-cell';
+const gridContainerStyle = 'width: fit-content; height: fit-content; overflow: hidden; background-color: #9BBA5A;'
+const gridColumnStyle = 'float: left; width: fit-content; height: fit-content; background-color: transparent;';
+const gridCellStyle = 'width: 20px; height: 20px; border: 3px solid transparent; border-radius:5px;';
 
 export class Canvas {
     static #stageGrid = [];
     static #gameObjectList = [];
-    static pixelPositions = [];
-    static initialize() {
-        // Draw Stage
-        for (let i = 0; i < 19; i++) {
-            const stageColumn = document.createElement("div");
-            stageColumn.classList.add("stage-column");
+    static #gridSizeX = 18;
+    static #gridSizeY = 16
 
-            let test = []
-            for (let j = 0; j < 17; j++) {
-                const stageCell = document.createElement("div");
-                stageCell.classList.add(emptyCell);
-                stageColumn.appendChild(stageCell);
-                test.unshift(stageCell);
+    static get gridSizeX() {
+        return this.#gridSizeX;
+    }
+
+    static set gridSizeX(newX) {
+        this.#gridSizeX = newX;
+    }
+
+    static get gridSizeY() {
+        return this.#gridSizeY;
+    }
+
+    static set gridSizeY(newY) {
+        this.#gridSizeY = newY;
+    }
+
+    static initialize() {
+        let gridContainerElement = document.createElement('div');
+        gridContainerElement.style = gridContainerStyle;
+
+        for (let i = 0; i < this.#gridSizeX + 1; i++) {
+            let gridColumnElement = document.createElement("div");
+            gridColumnElement.style = gridColumnStyle;
+
+            let divColumn = []
+
+            for (let j = 0; j < this.#gridSizeY + 1; j++) {
+                const gridCellElement = document.createElement("div");
+                gridCellElement.style = gridCellStyle;
+                gridColumnElement.appendChild(gridCellElement);
+                divColumn.unshift(gridCellElement);
             }
-            this.#stageGrid.push(test);
-            document.getElementById("stage-background").appendChild(stageColumn);
+            this.#stageGrid.push(divColumn);
+            gridContainerElement.appendChild(gridColumnElement);
         }
-        
+        document.body.appendChild(gridContainerElement);
+
         addEventListener('play', () => {
-            let event = new Event('build');
-    
+            let event = new Event('canvasUpdate');
+
             setInterval(() => {
                 this.#updatePixel();
                 dispatchEvent(event);
@@ -43,13 +66,13 @@ export class Canvas {
         try {
             for (let i = 0; i < 19; i++) {
                 for (let j = 0; j < 17; j++) {
-                    this.#stageGrid[i][j].className = emptyCell;
+                    this.#stageGrid[i][j].style.backgroundColor = 'transparent';
                 }
             }
 
             this.#gameObjectList.forEach(object => {
                 object.position.forEach(p => {
-                    this.#stageGrid[p[0]][p[1]].className = snakeBodyCell;
+                    this.#stageGrid[p[0]][p[1]].style.backgroundColor = object.color;
                 });
             });
         }

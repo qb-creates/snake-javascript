@@ -3,27 +3,12 @@ import { Canvas } from "./canvas.js";
 
 export class MonoBehaviour {
     #gameObject = null;
-
-    constructor() {
-        
-        setTimeout(() => {
-            this.awake();
-            this.start();
-            
-            setInterval(() => {
-                this.fixedUpdate();
-            }, Time.fixedDeltaTime * 1000);
-
-            addEventListener('build', () => {
-                this.update();
-            });
-        }, 2000);
-    }
+    
 
     static get className() {
         return this.name;
     }
-
+    
     set gameObject(gameObject) {
         if (this.#gameObject == null) {
             this.#gameObject = gameObject;
@@ -32,6 +17,21 @@ export class MonoBehaviour {
 
     get gameObject() {
         return this.#gameObject;
+    }
+
+    constructor() {
+        setTimeout(() => {
+            this.awake();
+            this.start();
+            
+            setInterval(() => {
+                this.fixedUpdate();
+            }, Time.fixedDeltaTime * 1000);
+
+            addEventListener('canvasUpdate', () => {
+                this.update();
+            });
+        }, 2000);
     }
 
     awake() {
