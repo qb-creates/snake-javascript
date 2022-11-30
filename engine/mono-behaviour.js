@@ -4,7 +4,6 @@ import { Canvas } from "./canvas.js";
 export class MonoBehaviour {
     #gameObject = null;
     
-
     static get className() {
         return this.name;
     }

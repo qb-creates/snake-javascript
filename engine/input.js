@@ -20,6 +20,11 @@ export class Input {
             keyDown: false, 
             keyUp: false
         },
+        q:  {
+            key: false, 
+            keyDown: false, 
+            keyUp: false
+        },
         s:  {
             key: false, 
             keyDown: false, 

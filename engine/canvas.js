@@ -64,6 +64,7 @@ export class Canvas {
 
     static removeGameObject(gameObject) {
         let index = this.#gameObjectList.indexOf(gameObject);
+        this.#gameObjectList[index] = null;
         this.#gameObjectList.splice(index, 1);
     }
 
