@@ -6,7 +6,6 @@ export default class SnakeGameObject {
     #position = [[7, 7], [8, 7], [9, 7]];
     #color = '#424242';
 
-    
     get scriptList() {
         return this.#scriptList;
     }
@@ -33,7 +32,7 @@ export default class SnakeGameObject {
     
         this.snakeController = new SnakeInput();
         this.snakeController.gameObject = this;
-        
+
         this.#scriptList.set(SnakeMovement.className, this.snakeMovement);
         this.#scriptList.set(SnakeInput.className, this.snakeController);        
     }

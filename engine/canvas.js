@@ -62,6 +62,11 @@ export class Canvas {
         this.#updatePixel();
     }
 
+    static removeGameObject(gameObject) {
+        let index = this.#gameObjectList.indexOf(gameObject);
+        this.#gameObjectList.splice(index, 1);
+    }
+
     static #updatePixel() {
         try {
             for (let i = 0; i < 19; i++) {
