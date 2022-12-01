@@ -1,10 +1,10 @@
 import { MonoBehaviour, Input, KeyCode } from "../../engine/qbcreates-js-engine.js";
-import SnakeMovement from "./snake-movement.js";
+import { SnakeMovement } from "./snake-exports.js";
 
-export default class SnakeInput extends MonoBehaviour{
+export class SnakeInput extends MonoBehaviour {
     #snakeMovement = null;
     #previousKey = KeyCode.d;
-    #clearToMove = [0,0];
+    #clearToMove = [0, 0];
 
     set clearToMove(newClearToMove) {
         this.#clearToMove = newClearToMove();

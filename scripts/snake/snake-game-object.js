@@ -1,9 +1,7 @@
-import SnakeMovement from "./snake-movement.js";
-import SnakeInput from "./snake-input.js";
-import SnakeCollision from "./snake-collision.js";
+import { SnakeCollision, SnakeInput, SnakeMovement } from "./snake-exports.js";
 import { Canvas } from "../../engine/canvas.js";
 
-export default class SnakeGameObject {
+export class SnakeGameObject {
     #scriptList = new Map();
     #position = [[7, 7], [8, 7], [9, 7]];
     #color = 'radial-gradient(#424242 100%, #424242)';

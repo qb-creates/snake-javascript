@@ -1,7 +1,7 @@
 import { MonoBehaviour, Input, KeyCode, Canvas } from "../../engine/qbcreates-js-engine.js";
 import AppleGameObject from "../apple/apple-game-object.js";
 
-export default class SnakeCollision extends MonoBehaviour{
+export class SnakeCollision extends MonoBehaviour{
     #canGoLeft = true;
     #canGoRight = true;
     #canGoUp = true;
