@@ -1,12 +1,10 @@
-import SnakeMovement from "./snake-movement.js";
-import SnakeInput from "./snake-input.js";
-import SnakeCollision from "./snake-collision.js";
 import { Canvas } from "../../engine/canvas.js";
+import AppleBehaviour from "./apple-behaviour.js";
 
-export default class SnakeGameObject {
+export default class AppleGameObject {
     #scriptList = new Map();
-    #position = [[7, 7], [8, 7], [9, 7]];
-    #color = 'radial-gradient(#424242 100%, #424242)';
+    #position = [[Math.floor(Math.random() * Canvas.gridSizeX), Math.floor(Math.random() * Canvas.gridSizeY)]];
+    #color = 'radial-gradient(#424242 45%, #9BBA5A 45%)';
     #isDestroyed = false;
 
     static get className() {
@@ -34,18 +32,10 @@ export default class SnakeGameObject {
     }
 
     constructor() {
-        this.snakeMovement = new SnakeMovement();
-        this.snakeMovement.gameObject = this;
+        let appleBehaviour = new AppleBehaviour();
+        appleBehaviour.gameObject = this;
 
-        this.snakeCollision = new SnakeCollision();
-        this.snakeCollision.gameObject = this;
-
-        this.snakeController = new SnakeInput();
-        this.snakeController.gameObject = this;
-
-        this.#scriptList.set(SnakeMovement.className, this.snakeMovement);
-        this.#scriptList.set(SnakeInput.className, this.snakeController);        
-        this.#scriptList.set(SnakeCollision.className, this.snakeCollision);
+        this.#scriptList.set(AppleBehaviour.className, appleBehaviour);
     }
 
     addComponent(key, component) {
@@ -60,7 +50,6 @@ export default class SnakeGameObject {
     destroy() {
         this.#isDestroyed = true;
         this.#scriptList.forEach(component => {
-            console.log(component);
             component = null;
         });
         Canvas.removeGameObject(this);

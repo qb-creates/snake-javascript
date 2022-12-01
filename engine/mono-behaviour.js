@@ -28,9 +28,11 @@ export class MonoBehaviour {
             }, Time.fixedDeltaTime * 1000);
 
             addEventListener('canvasUpdate', () => {
-                this.update();
+                if (!this.#gameObject.isDestroyed){
+                    this.update();
+                }
             });
-        }, 2000);
+        }, 100);
     }
 
     awake() {

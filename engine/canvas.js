@@ -57,6 +57,18 @@ export class Canvas {
         });
     }
 
+    static getGameObject(coordinates) {
+        return this.#gameObjectList.filter((object) => {
+            let result = false; 
+            object.position.forEach(p => {
+                if (p[0] == coordinates[0] && p[1] == coordinates[1]) {
+                    result = true;
+                }
+            });
+            return result;
+        })
+    }
+
     static addGameObject(gameObject) {
         this.#gameObjectList.push(gameObject);
         this.#updatePixel();
@@ -72,13 +84,13 @@ export class Canvas {
         try {
             for (let i = 0; i < 19; i++) {
                 for (let j = 0; j < 17; j++) {
-                    this.#stageGrid[i][j].style.backgroundColor = 'transparent';
+                    this.#stageGrid[i][j].style.backgroundImage = 'radial-gradient(transparent 100%, transparent)';
                 }
             }
 
             this.#gameObjectList.forEach(object => {
                 object.position.forEach(p => {
-                    this.#stageGrid[p[0]][p[1]].style.backgroundColor = object.color;
+                    this.#stageGrid[p[0]][p[1]].style.backgroundImage = object.color;
                 });
             });
         }

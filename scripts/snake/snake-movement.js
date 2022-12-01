@@ -5,8 +5,6 @@ export default class SnakeMovement extends MonoBehaviour {
     #snakeCollision
     #verticalAxis = 0;
     #horizontalAxis = 1;
-    #tailIndex = 0;
-    #headIndex = 2;
     #playerMoveTime = .1;
     #movePlayerTimer = 0;
 
