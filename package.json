@@ -1,11 +1,10 @@
 {
   "name": "scripts",
   "version": "1.0.0",
-  "type": "commonjs",
   "description": "",
-  "main": "./scripts/app.js",
+  "main": "./build.js",
   "scripts": {
-    "monobehaviour": "node ./engine/utilities/generate-mono-behaviour.js"
+    "monobehaviour": "node ./utilities/generate-mono-behaviour.mjs"
   },
   "keywords": [],
   "author": "",

@@ -15,7 +15,7 @@ let prompt = (query) => new Promise((resolve) => {
 
 let scriptInfo = await (async () => {
     let name = await prompt("Enter name for script: ");
-    let scriptLocation = await prompt('Enter directory location: ./');
+    let scriptLocation = await prompt('Enter directory location: ./src/');
     rl.close();
     return { name: name, scriptLocation: scriptLocation };
 })();
@@ -37,7 +37,7 @@ matches = scriptInfo.scriptLocation.match(/[/]/g);
 let engineScriptsPath = '../'.repeat(matches != null ? (matches.length + 1): 0);
 let monoBehaviourTemplate =
 `
-import { MonoBehaviour, Input, KeyCode } from "${engineScriptsPath}engine/qbcreates-js-engine.js";
+import { MonoBehaviour, Canvas, Time, Input, KeyCode } from "${engineScriptsPath}engine/qbcreates-js-engine.js";
 
 export default class ${className} extends MonoBehaviour{
 
@@ -52,6 +52,6 @@ export default class ${className} extends MonoBehaviour{
 }`
 
 // (B) WRITE TO FILE
-fs.writeFile(`./${scriptInfo.scriptLocation}/${scriptInfo.name}.js`, monoBehaviourTemplate, "utf8", (error, data) => {
+fs.writeFile(`./src/${scriptInfo.scriptLocation}/${scriptInfo.name}.js`, monoBehaviourTemplate, "utf8", (error, data) => {
     console.log("Write complete");
 });

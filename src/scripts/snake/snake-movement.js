@@ -16,10 +16,22 @@ export class SnakeMovement extends MonoBehaviour {
         this.#verticalAxis = newVerticalAxis;
     }
 
+    #hubConnection = null;
+    #subject = new signalR.Subject();
     awake() {
         this.#snakeCollision = this.gameObject.getComponent(SnakeCollision.className);
-    }
+        this.#subject = new signalR.Subject();
+        this.#hubConnection = new signalR.HubConnectionBuilder()
+            .withUrl('http://localhost:5000/fresh')
+            .build();
 
+        this.#hubConnection.start().then(() => {
+            this.#hubConnection.send("UploadStream", this.#subject, 10);
+            this.#subject.next("quentin");
+        })
+            .catch(err => console.log(err));
+    }
+    
     start() {
 
     }
@@ -28,7 +40,7 @@ export class SnakeMovement extends MonoBehaviour {
         this.#movePlayerTimer += Time.fixedDeltaTime;
 
         if (this.#movePlayerTimer >= this.#playerMoveTime) {
-
+            this.#subject.next('move');
             let canMove = this.#snakeCollision.checkForCollisions(this.#horizontalAxis, this.#verticalAxis);
 
             if (canMove) {
