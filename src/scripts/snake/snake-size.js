@@ -1,9 +1,10 @@
 
-import { MonoBehaviour, Canvas, Time, Input, KeyCode } from "../../engine/qbcreates-js-engine.js";
+import { MonoBehaviour, Canvas, Time, Input, KeyCode, Cell } from "../../engine/qbcreates-js-engine.js";
 import { snakeBodyColor } from "./snake-exports.js";
 
 export class SnakeSize extends MonoBehaviour {
-
+    #isGrowing = false;
+    
     awake() {
     }
 
@@ -13,19 +14,20 @@ export class SnakeSize extends MonoBehaviour {
     update() {
     }
 
+    get isGrowing() {
+        return this.#isGrowing;
+    }
+
     grow() {
-        let tailCoordinates = Canvas.getCellCoordinates(this.gameObject.cells[0]);
-        let nextTailCoordinates = Canvas.getCellCoordinates(this.gameObject.cells[1]);
+        this.#isGrowing = true;
+        let tailCoordinates = this.gameObject.cells[0].position;
+        let nextTailCoordinates = this.gameObject.cells[1].position;
 
         let x = (tailCoordinates.x - nextTailCoordinates.x) + tailCoordinates.x;
         let y = (tailCoordinates.y - nextTailCoordinates.y) + tailCoordinates.y;
-       
-        let options = {
-            x: x,
-            y: y,
-            color: snakeBodyColor,
-        }
-        let cell = Canvas.createCell(options);
+
+        let cell = new Cell(x, y, snakeBodyColor);
         this.gameObject.cells.unshift(cell);
+        this.#isGrowing = false;
     }
 }

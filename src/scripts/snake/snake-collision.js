@@ -1,5 +1,5 @@
 import { MonoBehaviour, Input, KeyCode, Canvas } from "../../engine/qbcreates-js-engine.js";
-
+import { SnakeGameObject } from "./snake-game-object.js";
 export class SnakeCollision extends MonoBehaviour{
     #canGoLeft = true;
     #canGoRight = true;
@@ -11,12 +11,28 @@ export class SnakeCollision extends MonoBehaviour{
 
     start() {
     }
-
+7
     update() {
         let headIndex = this.gameObject.cells.length - 1;
-        let headCoordinates = Canvas.getCellCoordinates(this.gameObject.cells[headIndex]);
+        let headCoordinates = this.gameObject.cells[headIndex].position;
 
-        if (headCoordinates.x >= Canvas.gridSizeX - Canvas.pixelScale) {
+        // let collisionList = Canvas.checkForCollisions({ x: headCoordinates.x, y: headCoordinates.y });
+        // let snakeGameObject = collisionList.filter(object => object instanceof (SnakeGameObject));
+
+        // if (snakeGameObject.length > 1) {
+        //     console.log("died");
+        // }
+
+        // for (let i = 0; i < headIndex - 1; i++) {
+        //     let asdf = Canvas.getCellCoordinates(this.gameObject.cells[i]);
+
+        //     if (asdf.x == headCoordinates.x && asdf.y == headCoordinates.y) {
+        //         console.log('died');
+        //         return;
+        //     }
+        // }
+
+        if (headCoordinates.x >= Canvas.gridSizeX - 1) {
             this.#canGoRight = false;
         } else {
             this.#canGoRight = true;
@@ -28,7 +44,7 @@ export class SnakeCollision extends MonoBehaviour{
             this.#canGoLeft = true;
         }
 
-        if (headCoordinates.y >= Canvas.gridSizeY - Canvas.pixelScale) {
+        if (headCoordinates.y >= Canvas.gridSizeY - 1) {
             this.#canGoUp = false;
         } else {
             this.#canGoUp = true;

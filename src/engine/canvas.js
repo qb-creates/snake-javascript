@@ -3,15 +3,15 @@ import { Time } from "./time.js";
 export class Canvas {
     static #gameObjectList = [];
     static #pixelScale = 25;
-    static #gridSizeX = 18 * this.#pixelScale;
-    static #gridSizeY = 16 * this.#pixelScale
+    static #gridSizeX = 18;
+    static #gridSizeY = 16;
 
     static get gridSizeX() {
         return this.#gridSizeX;
     }
 
     static set gridSizeX(newX) {
-        this.#gridSizeX = newX * this.#pixelScale;
+        this.#gridSizeX = newX;
     }
 
     static get gridSizeY() {
@@ -19,7 +19,7 @@ export class Canvas {
     }
 
     static set gridSizeY(newY) {
-        this.#gridSizeY = newY * this.#pixelScale;
+        this.#gridSizeY = newY;
     }
 
     static get pixelScale() {
@@ -38,8 +38,8 @@ export class Canvas {
         let gridContainerElement = document.createElement('div');
         gridContainerElement.id = 'stage-container';
         gridContainerElement.style.position = 'relative';
-        gridContainerElement.style.width = `${this.gridSizeX}px`;
-        gridContainerElement.style.height = `${this.gridSizeY}px`;
+        gridContainerElement.style.width = `${this.gridSizeX * this.#pixelScale}px`;
+        gridContainerElement.style.height = `${this.gridSizeY * this.#pixelScale}px`;
         gridContainerElement.style.backgroundColor = '#9BBA5A';
         gridContainerElement.style.margin = '0 auto';
         document.body.appendChild(gridContainerElement);
@@ -56,8 +56,8 @@ export class Canvas {
     static checkForCollisions(coordinates) {
         return this.#gameObjectList.filter((object) => {
             let result = false;
-            object.cells.forEach(p => {
-                if (p.offsetLeft == coordinates.x && (this.#gridSizeY - p.offsetTop - this.#pixelScale) == coordinates.y) {
+            object.cells.forEach(cell => {
+                if (cell.position.x == coordinates.x && cell.position.y == coordinates.y) {
                     result = true;
                 }
             });
@@ -74,7 +74,7 @@ export class Canvas {
         this.#gameObjectList[index] = null;
         this.#gameObjectList.splice(index, 1);
         gameObject.cells.forEach(cell => {
-            this.stageContainer.removeChild(cell);
+            this.stageContainer.removeChild(cell.uiReference);
         })
     }
 

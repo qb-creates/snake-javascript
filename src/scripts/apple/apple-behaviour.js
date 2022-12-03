@@ -1,5 +1,6 @@
 
-import { MonoBehaviour, Canvas, Input, KeyCode } from "../../engine/qbcreates-js-engine.js";
+import { MonoBehaviour, Canvas, Input, KeyCode, Cell } from "../../engine/qbcreates-js-engine.js";
+import { ScoreManager } from "../managers/score-manager.js";
 import { SnakeGameObject, SnakeSize } from "../snake/snake-exports.js";
 import AppleGameObject from "./apple-game-object.js";
 
@@ -9,21 +10,14 @@ export default class AppleBehaviour extends MonoBehaviour {
 
     awake() {
         while (true) {
-            let x = Math.floor(Math.random() * (Canvas.gridSizeX / Canvas.pixelScale));
-            let y = Math.floor(Math.random() * (Canvas.gridSizeY / Canvas.pixelScale));
+            let x = Math.floor(Math.random() * Canvas.gridSizeX );
+            let y = Math.floor(Math.random() * Canvas.gridSizeY );
 
             let collisionList = Canvas.checkForCollisions({ x: x, y: y });
             let snakeGameObject = collisionList.find(object => object instanceof (SnakeGameObject));
 
             if (snakeGameObject == null) {
-                let options = {
-                    usePixelScale: true,
-                    x: x,
-                    y: y,
-                    color: appleColor
-                }
-
-                let cell = Canvas.createCell(options)
+                let cell = new Cell(x, y, appleColor);
                 this.gameObject.cells.push(cell);
                 return;
             }
@@ -34,7 +28,7 @@ export default class AppleBehaviour extends MonoBehaviour {
     }
 
     update() {
-        let cellCoordinates = Canvas.getCellCoordinates(this.gameObject.cells[0]);
+        let cellCoordinates = this.gameObject.cells[0].position;
         let collisionList = Canvas.checkForCollisions({ x: cellCoordinates.x, y: cellCoordinates.y });
         let snakeGameObject = collisionList.find(object => object instanceof (SnakeGameObject));
 
@@ -46,6 +40,7 @@ export default class AppleBehaviour extends MonoBehaviour {
 
             let appleGameObject = new AppleGameObject();
             Canvas.addGameObject(appleGameObject);
+            ScoreManager.addPoint();
         }
     }
 }

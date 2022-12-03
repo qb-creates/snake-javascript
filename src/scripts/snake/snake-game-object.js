@@ -1,5 +1,5 @@
 import { SnakeCollision, SnakeInput, SnakeMovement, SnakeSize, snakeHeadColor, snakeBodyColor } from "./snake-exports.js";
-import { Canvas } from "../../engine/canvas.js";
+import { Canvas, Cell } from "../../engine/qbcreates-js-engine.js";
 
 export class SnakeGameObject {
     #scriptList = new Map();
@@ -33,7 +33,7 @@ export class SnakeGameObject {
                 color: i == 9 ? snakeHeadColor : snakeBodyColor
             }
 
-            let cell = Canvas.createCell(options);
+            let cell = new Cell(options.x, options.y, options.color);
             this.#cells.push(cell);
         }
 
