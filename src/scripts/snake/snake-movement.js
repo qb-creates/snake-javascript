@@ -31,16 +31,16 @@ export class SnakeMovement extends MonoBehaviour {
             let canMove = this.#snakeCollision.checkForCollisions(this.#horizontalAxis, this.#verticalAxis);
 
             if (canMove) {
-                let headIndex = this.gameObject.position.length - 1
-
-                let headX = this.gameObject.position[headIndex][0] + this.#horizontalAxis;
-                let headY = this.gameObject.position[headIndex][1] + this.#verticalAxis;
+                let headIndex = this.gameObject.cells.length - 1
+                let coordinates = Canvas.getCellCoordinates(this.gameObject.cells[headIndex]); 
+                let headX = coordinates.x + (this.#horizontalAxis * Canvas.pixelScale);
+                let headY = coordinates.y + (this.#verticalAxis * Canvas.pixelScale);
            
-                this.gameObject.position[0][0] = headX;
-                this.gameObject.position[0][1] = headY;
-                this.gameObject.position[0][2] = snakeHeadColor;
-                this.gameObject.position[headIndex][2] = snakeBodyColor;
-                this.gameObject.position.push(this.gameObject.position.shift());
+                this.gameObject.cells[0].style.left = `${headX}px`;
+                this.gameObject.cells[0].style.bottom = `${headY}px`;
+                this.gameObject.cells[0].style.backgroundImage = snakeHeadColor;
+                this.gameObject.cells[headIndex].style.backgroundImage = snakeBodyColor;
+                this.gameObject.cells.push(this.gameObject.cells.shift());
                 this.#movePlayerTimer = 0;
             }
         }

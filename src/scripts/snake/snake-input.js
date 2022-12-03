@@ -7,7 +7,7 @@ export class SnakeInput extends MonoBehaviour {
     #clearToMove = [0, 0];
 
     set clearToMove(newClearToMove) {
-        this.#clearToMove = newClearToMove();
+        this.#clearToMove = newClearToMove;
     }
 
     awake() {
@@ -18,11 +18,8 @@ export class SnakeInput extends MonoBehaviour {
     }
 
     update() {
-        if (Input.getKeyDown(KeyCode.q)) {
-            this.gameObject.destroy();
-        }
         if (true) {
-            this.#clearToMove = this.gameObject.position[this.gameObject.position.length - 1];
+            this.#clearToMove = this.gameObject.cells[this.gameObject.cells.length - 1];
             if (Input.getKeyDown(KeyCode.w) && this.#previousKey != KeyCode.s) {
                 this.#snakeMovement.verticalAxis = 1;
                 this.#snakeMovement.horizontalAxis = 0;
@@ -40,7 +37,6 @@ export class SnakeInput extends MonoBehaviour {
                 this.#snakeMovement.horizontalAxis = 1;
                 this.#previousKey = KeyCode.d;
             }
-
         }
     }
 }

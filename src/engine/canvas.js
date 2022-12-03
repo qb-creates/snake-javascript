@@ -1,21 +1,17 @@
 import { Time } from "./time.js";
 
-const gridContainerStyle = 'margin: 0 auto; width: fit-content; height: fit-content; overflow: hidden; background-color: #9BBA5A;'
-const gridColumnStyle = 'float: left; width: fit-content; height: fit-content; background-color: transparent;';
-const gridCellStyle = 'width: 25px; height: 25px; border: 3px solid transparent; border-radius:5px;';
-
 export class Canvas {
-    static #stageGrid = [];
     static #gameObjectList = [];
-    static #gridSizeX = 18;
-    static #gridSizeY = 16
+    static #pixelScale = 25;
+    static #gridSizeX = 18 * this.#pixelScale;
+    static #gridSizeY = 16 * this.#pixelScale
 
     static get gridSizeX() {
         return this.#gridSizeX;
     }
 
     static set gridSizeX(newX) {
-        this.#gridSizeX = newX;
+        this.#gridSizeX = newX * this.#pixelScale;
     }
 
     static get gridSizeY() {
@@ -23,45 +19,45 @@ export class Canvas {
     }
 
     static set gridSizeY(newY) {
-        this.#gridSizeY = newY;
+        this.#gridSizeY = newY * this.#pixelScale;
+    }
+
+    static get pixelScale() {
+        return this.#pixelScale;
+    }
+
+    static set pixelScale(newScale) {
+        this.#pixelScale = newScale;
+    }
+
+    static get stageContainer() {
+        return document.getElementById('stage-container');
     }
 
     static initialize() {
         let gridContainerElement = document.createElement('div');
-        gridContainerElement.style = gridContainerStyle;
-
-        for (let i = 0; i < this.#gridSizeX + 1; i++) {
-            let gridColumnElement = document.createElement("div");
-            gridColumnElement.style = gridColumnStyle;
-
-            let divColumn = []
-
-            for (let j = 0; j < this.#gridSizeY + 1; j++) {
-                const gridCellElement = document.createElement("div");
-                gridCellElement.style = gridCellStyle;
-                gridColumnElement.appendChild(gridCellElement);
-                divColumn.unshift(gridCellElement);
-            }
-            this.#stageGrid.push(divColumn);
-            gridContainerElement.appendChild(gridColumnElement);
-        }
+        gridContainerElement.id = 'stage-container';
+        gridContainerElement.style.position = 'relative';
+        gridContainerElement.style.width = `${this.gridSizeX}px`;
+        gridContainerElement.style.height = `${this.gridSizeY}px`;
+        gridContainerElement.style.backgroundColor = '#9BBA5A';
+        gridContainerElement.style.margin = '0 auto';
         document.body.appendChild(gridContainerElement);
 
         addEventListener('play', () => {
             let event = new Event('canvasUpdate');
 
             setInterval(() => {
-                this.#updatePixel();
                 dispatchEvent(event);
             }, Time.deltaTime * 1000);
         });
     }
 
-    static getGameObject(coordinates) {
+    static checkForCollisions(coordinates) {
         return this.#gameObjectList.filter((object) => {
-            let result = false; 
-            object.position.forEach(p => {
-                if (p[0] == coordinates[0] && p[1] == coordinates[1]) {
+            let result = false;
+            object.cells.forEach(p => {
+                if (p.offsetLeft == coordinates.x && (this.#gridSizeY - p.offsetTop - this.#pixelScale) == coordinates.y) {
                     result = true;
                 }
             });
@@ -71,31 +67,34 @@ export class Canvas {
 
     static addGameObject(gameObject) {
         this.#gameObjectList.push(gameObject);
-        this.#updatePixel();
     }
 
     static removeGameObject(gameObject) {
         let index = this.#gameObjectList.indexOf(gameObject);
         this.#gameObjectList[index] = null;
         this.#gameObjectList.splice(index, 1);
+        gameObject.cells.forEach(cell => {
+            this.stageContainer.removeChild(cell);
+        })
     }
 
-    static #updatePixel() {
-        try {
-            for (let i = 0; i < 19; i++) {
-                for (let j = 0; j < 17; j++) {
-                    this.#stageGrid[i][j].style.backgroundImage = 'radial-gradient(transparent 100%, transparent)';
-                }
-            }
+    /**
+     * Create a new cell at a specific coordinate that can be set through the options
+     * @param {{usePixelScale: boolean, x: number, y: number, color: string}} options 
+     * @returns Returns the newly created cell.
+     */
+    static createCell(options) {
+        let pixelScaleModifier = options.usePixelScale ? this.#pixelScale : 1;
+        let cell = document.createElement('div');
+        let size = `width: ${this.#pixelScale}px; height: ${this.#pixelScale}px; `;
+        let position = `left: ${options.x * pixelScaleModifier}px; bottom: ${options.y * pixelScaleModifier}px; position: absolute; `
+        let color = `background-image: ${options.color}; border-radius:5px;`
+        cell.style = [size, position, color].join('');
+        Canvas.stageContainer.appendChild(cell);
+        return cell;
+    }
 
-            this.#gameObjectList.forEach(object => {
-                object.position.forEach(p => {           
-                    this.#stageGrid[p[0]][p[1]].style.backgroundImage = p[2];
-                });
-            });
-        }
-        catch (error) {
-            //console.log(error);
-        }
+    static getCellCoordinates(cell) {
+        return { x: cell.offsetLeft, y: Canvas.gridSizeY - cell.offsetTop - Canvas.pixelScale };
     }
 }

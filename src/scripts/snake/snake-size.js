@@ -14,8 +14,18 @@ export class SnakeSize extends MonoBehaviour {
     }
 
     grow() {
-        let x = (this.gameObject.position[0][0] - this.gameObject.position[1][0]) + this.gameObject.position[0][0];
-        let y = (this.gameObject.position[0][1] - this.gameObject.position[1][1]) + this.gameObject.position[0][1];
-        this.gameObject.position.unshift([x, y, snakeBodyColor]);
+        let tailCoordinates = Canvas.getCellCoordinates(this.gameObject.cells[0]);
+        let nextTailCoordinates = Canvas.getCellCoordinates(this.gameObject.cells[1]);
+
+        let x = (tailCoordinates.x - nextTailCoordinates.x) + tailCoordinates.x;
+        let y = (tailCoordinates.y - nextTailCoordinates.y) + tailCoordinates.y;
+       
+        let options = {
+            x: x,
+            y: y,
+            color: snakeBodyColor,
+        }
+        let cell = Canvas.createCell(options);
+        this.gameObject.cells.unshift(cell);
     }
 }

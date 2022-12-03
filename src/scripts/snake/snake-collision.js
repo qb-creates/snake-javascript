@@ -1,5 +1,4 @@
 import { MonoBehaviour, Input, KeyCode, Canvas } from "../../engine/qbcreates-js-engine.js";
-import AppleGameObject from "../apple/apple-game-object.js";
 
 export class SnakeCollision extends MonoBehaviour{
     #canGoLeft = true;
@@ -14,28 +13,28 @@ export class SnakeCollision extends MonoBehaviour{
     }
 
     update() {
-        let headX = this.gameObject.position[this.gameObject.position.length - 1][0];
-        let headY = this.gameObject.position[this.gameObject.position.length - 1][1];
+        let headIndex = this.gameObject.cells.length - 1;
+        let headCoordinates = Canvas.getCellCoordinates(this.gameObject.cells[headIndex]);
 
-        if (headX >= Canvas.gridSizeX) {
+        if (headCoordinates.x >= Canvas.gridSizeX - Canvas.pixelScale) {
             this.#canGoRight = false;
         } else {
             this.#canGoRight = true;
         }
 
-        if (headX <= 0) {
+        if (headCoordinates.x <= 0) {
             this.#canGoLeft = false;
         } else {
             this.#canGoLeft = true;
         }
 
-        if (headY >= Canvas.gridSizeY) {
+        if (headCoordinates.y >= Canvas.gridSizeY - Canvas.pixelScale) {
             this.#canGoUp = false;
         } else {
             this.#canGoUp = true;
         }
 
-        if (headY <= 0) {
+        if (headCoordinates.y <= 0) {
             this.#canGoDown = false;
         } else {
             this.#canGoDown = true;

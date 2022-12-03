@@ -5,7 +5,7 @@ const appleColor = 'radial-gradient(red 45%, #9BBA5A 45%)';
 
 export default class AppleGameObject {
     #scriptList = new Map();
-    #position = [[0, 0, 'radial-gradient(#9BBA5A 45%, #9BBA5A 45%)']];
+    #cells = [];
     #isDestroyed = false;
 
     static get className() {
@@ -16,12 +16,12 @@ export default class AppleGameObject {
         return this.#isDestroyed;
     }
 
-    set position(newPosition) {
-        this.#position = newPosition;
+    set cells(newCells) {
+        this.#cells = newCells;
     }
 
-    get position() {
-        return this.#position;
+    get cells() {
+        return this.#cells;
     }
 
     constructor() {

@@ -3,8 +3,8 @@ import { Canvas } from "../../engine/canvas.js";
 
 export class SnakeGameObject {
     #scriptList = new Map();
-    #position = [[7, 7, snakeBodyColor], [8, 7, snakeBodyColor], [9, 7, snakeHeadColor]];
     #isDestroyed = false;
+    #cells = []
 
     static get className() {
         return this.name;
@@ -14,15 +14,29 @@ export class SnakeGameObject {
         return this.#isDestroyed;
     }
 
-    set position(newPosition) {
-        this.#position = newPosition;
+    set cells(newCells) {
+        this.#cells = newCells;
     }
-    
-    get position() {
-        return this.#position;
+
+    get cells() {
+        return this.#cells;
     }
 
     constructor() {
+
+        // Build snake body;
+        for (let i = 7; i < 10; i++) {
+            let options = {
+                usePixelScale: true,
+                x: i,
+                y: 7,
+                color: i == 9 ? snakeHeadColor : snakeBodyColor
+            }
+
+            let cell = Canvas.createCell(options);
+            this.#cells.push(cell);
+        }
+
         this.snakeMovement = new SnakeMovement();
         this.snakeMovement.gameObject = this;
 
@@ -36,7 +50,7 @@ export class SnakeGameObject {
         this.snakeSize.gameObject = this;
 
         this.#scriptList.set(SnakeMovement.className, this.snakeMovement);
-        this.#scriptList.set(SnakeInput.className, this.snakeController);        
+        this.#scriptList.set(SnakeInput.className, this.snakeController);
         this.#scriptList.set(SnakeCollision.className, this.snakeCollision);
         this.#scriptList.set(SnakeSize.className, this.snakeSize);
     }
