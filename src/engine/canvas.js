@@ -1,8 +1,8 @@
 import { Time } from "./time.js";
 
-const gridContainerStyle = 'width: fit-content; height: fit-content; overflow: hidden; background-color: #9BBA5A;'
+const gridContainerStyle = 'margin: 0 auto; width: fit-content; height: fit-content; overflow: hidden; background-color: #9BBA5A;'
 const gridColumnStyle = 'float: left; width: fit-content; height: fit-content; background-color: transparent;';
-const gridCellStyle = 'width: 20px; height: 20px; border: 3px solid transparent; border-radius:5px;';
+const gridCellStyle = 'width: 25px; height: 25px; border: 3px solid transparent; border-radius:5px;';
 
 export class Canvas {
     static #stageGrid = [];
@@ -89,8 +89,8 @@ export class Canvas {
             }
 
             this.#gameObjectList.forEach(object => {
-                object.position.forEach(p => {
-                    this.#stageGrid[p[0]][p[1]].style.backgroundImage = object.color;
+                object.position.forEach(p => {           
+                    this.#stageGrid[p[0]][p[1]].style.backgroundImage = p[2];
                 });
             });
         }

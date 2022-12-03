@@ -34,12 +34,12 @@ let className = (() => {
 // Used to find out how many directories deep the script is going.
 matches = scriptInfo.scriptLocation.match(/[/]/g);
 
-let engineScriptsPath = '../'.repeat(matches != null ? (matches.length + 1): 0);
+let engineScriptsPath = '../'.repeat(matches != null ? (matches.length + 1) : 0);
 let monoBehaviourTemplate =
-`
+    `
 import { MonoBehaviour, Canvas, Time, Input, KeyCode } from "${engineScriptsPath}engine/qbcreates-js-engine.js";
 
-export default class ${className} extends MonoBehaviour{
+export class ${className} extends MonoBehaviour{
 
     awake() {
     }

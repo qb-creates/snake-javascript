@@ -7,7 +7,7 @@ Canvas.initialize();
 
 (function () {
     let snakeGameObject = new SnakeGameObject();
-    snakeGameObject.position = [[1, 4], [2, 4], [3, 4]];
+    //snakeGameObject.position = [[1, 4], [2, 4], [3, 4]];
     Canvas.addGameObject(snakeGameObject);
 
     let appleGameObject = new AppleGameObject();

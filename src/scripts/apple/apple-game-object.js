@@ -1,10 +1,11 @@
 import { Canvas } from "../../engine/canvas.js";
 import AppleBehaviour from "./apple-behaviour.js";
 
+const appleColor = 'radial-gradient(red 45%, #9BBA5A 45%)';
+
 export default class AppleGameObject {
     #scriptList = new Map();
-    #position = [[Math.floor(Math.random() * Canvas.gridSizeX), Math.floor(Math.random() * Canvas.gridSizeY)]];
-    #color = 'radial-gradient(#424242 45%, #9BBA5A 45%)';
+    #position = [[0, 0, 'radial-gradient(#9BBA5A 45%, #9BBA5A 45%)']];
     #isDestroyed = false;
 
     static get className() {
@@ -18,17 +19,9 @@ export default class AppleGameObject {
     set position(newPosition) {
         this.#position = newPosition;
     }
-    
+
     get position() {
         return this.#position;
-    }
-    
-    set color(newColor) {
-        this.#color = newColor;
-    }
-    
-    get color() {
-        return this.#color;
     }
 
     constructor() {

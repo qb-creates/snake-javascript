@@ -1,10 +1,9 @@
-import { SnakeCollision, SnakeInput, SnakeMovement } from "./snake-exports.js";
+import { SnakeCollision, SnakeInput, SnakeMovement, SnakeSize, snakeHeadColor, snakeBodyColor } from "./snake-exports.js";
 import { Canvas } from "../../engine/canvas.js";
 
 export class SnakeGameObject {
     #scriptList = new Map();
-    #position = [[7, 7], [8, 7], [9, 7]];
-    #color = 'radial-gradient(#424242 100%, #424242)';
+    #position = [[7, 7, snakeBodyColor], [8, 7, snakeBodyColor], [9, 7, snakeHeadColor]];
     #isDestroyed = false;
 
     static get className() {
@@ -22,14 +21,6 @@ export class SnakeGameObject {
     get position() {
         return this.#position;
     }
-    
-    set color(newColor) {
-        this.#color = newColor;
-    }
-    
-    get color() {
-        return this.#color;
-    }
 
     constructor() {
         this.snakeMovement = new SnakeMovement();
@@ -41,9 +32,13 @@ export class SnakeGameObject {
         this.snakeController = new SnakeInput();
         this.snakeController.gameObject = this;
 
+        this.snakeSize = new SnakeSize();
+        this.snakeSize.gameObject = this;
+
         this.#scriptList.set(SnakeMovement.className, this.snakeMovement);
         this.#scriptList.set(SnakeInput.className, this.snakeController);        
         this.#scriptList.set(SnakeCollision.className, this.snakeCollision);
+        this.#scriptList.set(SnakeSize.className, this.snakeSize);
     }
 
     addComponent(key, component) {
@@ -51,8 +46,8 @@ export class SnakeGameObject {
         this.#scriptList.set(key, component);
     }
 
-    getComponent(component) {
-        return this.#scriptList.get(component);
+    getComponent(key) {
+        return this.#scriptList.get(key);
     }
 
     destroy() {
