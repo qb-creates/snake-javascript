@@ -1,10 +1,12 @@
 import { Time } from "./time.js";
+import { GameStateManager } from "../scripts/managers/game-state-manager.js";
 
 export class Canvas {
     static #gameObjectList = [];
     static #pixelScale = 25;
     static #gridSizeX = 18;
     static #gridSizeY = 16;
+    static #updateInterval = null;
 
     static get gridSizeX() {
         return this.#gridSizeX;
@@ -44,12 +46,16 @@ export class Canvas {
         gridContainerElement.style.margin = '0 auto';
         document.body.appendChild(gridContainerElement);
 
-        addEventListener('play', () => {
+        GameStateManager.gameStateEvent.subscribe(isStarted => {
             let event = new Event('canvasUpdate');
 
-            setInterval(() => {
-                dispatchEvent(event);
-            }, Time.deltaTime * 1000);
+            if (isStarted) {
+                this.#updateInterval = setInterval(() => {
+                    dispatchEvent(event);
+                }, Time.deltaTime * 1000);
+            } else {
+                clearInterval(this.#updateInterval);
+            }
         });
     }
 
