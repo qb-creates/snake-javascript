@@ -3,6 +3,8 @@ import AppleGameObject from "./apple/apple-game-object.js";
 import { GameStateManager } from "./managers/game-state-manager.js";
 import { SnakeGameObject } from "./snake/snake-exports.js";
 
+// Canvas.pixelScale = 30;
+// Canvas.gridSizeY = window.innerHeight / 30;
 Input.initialize();
 Canvas.initialize();
 (function () {

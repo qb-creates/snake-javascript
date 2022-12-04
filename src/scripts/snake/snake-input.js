@@ -3,12 +3,6 @@ import { SnakeMovement } from "./snake-exports.js";
 
 export class SnakeInput extends MonoBehaviour {
     #snakeMovement = null;
-    #previousKey = KeyCode.d;
-    #clearToMove = [0, 0];
-
-    set clearToMove(newClearToMove) {
-        this.#clearToMove = newClearToMove;
-    }
 
     awake() {
         this.#snakeMovement = this.gameObject.getComponent(SnakeMovement.className);
@@ -18,25 +12,18 @@ export class SnakeInput extends MonoBehaviour {
     }
 
     update() {
-        if (true) {
-            this.#clearToMove = this.gameObject.cells[this.gameObject.cells.length - 1];
-            if (Input.getKeyDown(KeyCode.w) && this.#previousKey != KeyCode.s) {
-                this.#snakeMovement.verticalAxis = 1;
-                this.#snakeMovement.horizontalAxis = 0;
-                this.#previousKey = KeyCode.w;
-            } else if (Input.getKeyDown(KeyCode.s) && this.#previousKey != KeyCode.w) {
-                this.#snakeMovement.verticalAxis = -1;
-                this.#snakeMovement.horizontalAxis = 0;
-                this.#previousKey = KeyCode.s;
-            } else if (Input.getKeyDown(KeyCode.a) && this.#previousKey != KeyCode.d) {
-                this.#snakeMovement.verticalAxis = 0;
-                this.#snakeMovement.horizontalAxis = -1;
-                this.#previousKey = KeyCode.a;
-            } else if (Input.getKeyDown(KeyCode.d) && this.#previousKey != KeyCode.a) {
-                this.#snakeMovement.verticalAxis = 0;
-                this.#snakeMovement.horizontalAxis = 1;
-                this.#previousKey = KeyCode.d;
-            }
+        if (Input.getKeyDown(KeyCode.w) && this.#snakeMovement.currentDirection[1] != -1) {
+            this.#snakeMovement.verticalAxis = 1;
+            this.#snakeMovement.horizontalAxis = 0;
+        } else if (Input.getKeyDown(KeyCode.s) && this.#snakeMovement.currentDirection[1] != 1) {
+            this.#snakeMovement.verticalAxis = -1;
+            this.#snakeMovement.horizontalAxis = 0;
+        } else if (Input.getKeyDown(KeyCode.a) && this.#snakeMovement.currentDirection[0] != 1) {
+            this.#snakeMovement.verticalAxis = 0;
+            this.#snakeMovement.horizontalAxis = -1;
+        } else if (Input.getKeyDown(KeyCode.d) && this.#snakeMovement.currentDirection[0] != -1) {
+            this.#snakeMovement.verticalAxis = 0;
+            this.#snakeMovement.horizontalAxis = 1;
         }
     }
 }
