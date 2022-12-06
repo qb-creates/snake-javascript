@@ -1,5 +1,5 @@
 
-import { MonoBehaviour, Canvas, Time, Input, KeyCode, Cell } from "../../engine/qbcreates-js-engine.js";
+import { MonoBehaviour, Canvas, Time, Input, KeyCode } from "../../engine/qbcreates-js-engine.js";
 import { snakeBodyColor } from "./snake-exports.js";
 
 export class SnakeSize extends MonoBehaviour {

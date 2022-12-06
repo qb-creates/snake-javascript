@@ -33,7 +33,7 @@ export class SnakeCollision extends MonoBehaviour{
             }
         }
 
-        if (headCoordinates.x >= Canvas.gridSizeX - 1) {
+        if (headCoordinates.x >= Canvas.canvasWidth - 1) {
             this.#canGoRight = false;
         } else {
             this.#canGoRight = true;
@@ -45,7 +45,7 @@ export class SnakeCollision extends MonoBehaviour{
             this.#canGoLeft = true;
         }
 
-        if (headCoordinates.y >= Canvas.gridSizeY - 1) {
+        if (headCoordinates.y >= Canvas.canvasHeight - 1) {
             this.#canGoUp = false;
         } else {
             this.#canGoUp = true;
@@ -59,7 +59,7 @@ export class SnakeCollision extends MonoBehaviour{
     }
 
     checkForCollisions(horizontalAxis, verticalAxis) {
-        if (horizontalAxis > Canvas.gridSizeX - 1) {
+        if (horizontalAxis > Canvas.canvasWidth - 1) {
             return false;
         } 
 
@@ -67,7 +67,7 @@ export class SnakeCollision extends MonoBehaviour{
             return false;
         } 
 
-        if (verticalAxis > Canvas.gridSizeY - 1) {
+        if (verticalAxis > Canvas.canvasHeight - 1) {
             return false;
         } 
         

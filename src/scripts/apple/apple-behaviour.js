@@ -1,5 +1,5 @@
 
-import { MonoBehaviour, Canvas, Input, KeyCode, Cell } from "../../engine/qbcreates-js-engine.js";
+import { MonoBehaviour, Canvas, Input, KeyCode } from "../../engine/qbcreates-js-engine.js";
 import { ScoreManager } from "../managers/score-manager.js";
 import { SnakeGameObject, SnakeSize } from "../snake/snake-exports.js";
 import AppleGameObject from "./apple-game-object.js";
@@ -10,8 +10,8 @@ export default class AppleBehaviour extends MonoBehaviour {
 
     awake() {
         while (true) {
-            let x = Math.floor(Math.random() * Canvas.gridSizeX );
-            let y = Math.floor(Math.random() * Canvas.gridSizeY );
+            let x = Math.floor(Math.random() * Canvas.canvasWidth );
+            let y = Math.floor(Math.random() * Canvas.canvasHeight );
 
             let collisionList = Canvas.checkForCollisions({ x: x, y: y });
             let snakeGameObject = collisionList.find(object => object instanceof (SnakeGameObject));

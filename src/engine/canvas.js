@@ -1,63 +1,67 @@
 import { Time } from "./time.js";
 import { GameStateManager } from "../scripts/managers/game-state-manager.js";
+import { Sprite } from "./sprites.js";
 
 export class Canvas {
+    static #canvas = null;
+    static #context = null;
+    static #ppu = 25;
+    static #previousTimestamp = 0;
     static #gameObjectList = [];
-    static #pixelScale = 25;
-    static #gridSizeX = 18;
-    static #gridSizeY = 16;
-    static #updateInterval = null;
-
-    static get gridSizeX() {
-        return this.#gridSizeX;
+    static event = new Event('canvasUpdate');
+    static get canvasWidth() {
+        return Canvas.#canvas.width;
     }
 
-    static set gridSizeX(newX) {
-        this.#gridSizeX = newX;
+    static set canvasWidth(value) {
+        Canvas.#canvas.width = value;
     }
 
-    static get gridSizeY() {
-        return this.#gridSizeY;
+    static get canvasHeight() {
+        return Canvas.#canvas.height;
     }
 
-    static set gridSizeY(newY) {
-        this.#gridSizeY = newY;
+    static set canvasHeight(value) {
+        Canvas.#canvas.height = value;
     }
 
-    static get pixelScale() {
-        return this.#pixelScale;
+    static get ppu() {
+        return this.#ppu;
     }
 
-    static set pixelScale(newScale) {
-        this.#pixelScale = newScale;
+    static set ppu(value) {
+        this.#ppu = value;
     }
 
-    static get stageContainer() {
-        return document.getElementById('stage-container');
+    static get context() {
+        return Canvas.#context;
     }
 
-    static initialize() {
-        let gridContainerElement = document.createElement('div');
-        gridContainerElement.id = 'stage-container';
-        gridContainerElement.style.position = 'relative';
-        gridContainerElement.style.width = `${this.gridSizeX * this.#pixelScale}px`;
-        gridContainerElement.style.height = `${this.gridSizeY * this.#pixelScale}px`;
-        gridContainerElement.style.backgroundColor = '#9BBA5A';
-        gridContainerElement.style.margin = '0 auto';
-        document.body.appendChild(gridContainerElement);
+    constructor() {
+        if (this instanceof Canvas) {
+            throw new Error("A static class cannot be instantiated.");
+        }
+    }
+
+    static configureCanvas(canvasWidth, canvasHeight, ppu) {
+        this.#ppu = ppu;
+        this.#canvas = document.createElement('canvas');
+        this.#canvas.style = `border: 5px solid white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);`;
+        this.#canvas.width = canvasWidth;
+        this.#canvas.height = canvasHeight;
+        this.#context = this.#canvas.getContext('2d');
+        this.#context.transform(1, 0, 0, -1, 0, canvasHeight); // flips the axis
+        this.#context.translate(canvasWidth / 2, canvasHeight / 2);
+        document.body.appendChild(this.#canvas);
 
         GameStateManager.gameStateEvent.subscribe(isStarted => {
-            let event = new Event('canvasUpdate');
-
             if (isStarted) {
-                this.#updateInterval = setInterval(() => {
-                    dispatchEvent(event);
-                }, Time.deltaTime * 1000);
-            } else {
-                clearInterval(this.#updateInterval);
+                requestAnimationFrame(this.#updateCanvas);
             }
         });
     }
+
+
 
     static checkForCollisions(coordinates) {
         return this.#gameObjectList.filter((object) => {
@@ -84,23 +88,38 @@ export class Canvas {
         })
     }
 
-    /**
-     * Create a new cell at a specific coordinate that can be set through the options
-     * @param {{usePixelScale: boolean, x: number, y: number, color: string}} options 
-     * @returns Returns the newly created cell.
-     */
-    static createCell(options) {
-        let pixelScaleModifier = options.usePixelScale ? this.#pixelScale : 1;
-        let cell = document.createElement('div');
-        let size = `width: ${this.#pixelScale}px; height: ${this.#pixelScale}px; `;
-        let position = `left: ${options.x * pixelScaleModifier}px; bottom: ${options.y * pixelScaleModifier}px; position: absolute; `
-        let color = `background-image: ${options.color}; border-radius:5px;`
-        cell.style = [size, position, color].join('');
-        Canvas.stageContainer.appendChild(cell);
-        return cell;
+    static #updateCanvas = (timestamp) => {
+        this.#context.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
+
+        if (true) {
+            for (let i = -20; i < 20; i++) {
+                for (let j = -20; j < 20; j++) {
+                    this.#context.strokeStyle = 'gray';
+
+                    this.#context.beginPath();
+                    this.#context.roundRect(i * 25, j * 25, 75, 75, [0]);
+                    this.#context.stroke();
+                }
+            }
+        }
+
+        this.asdf(this.#gameObjectList);
+        // TODO set Time.delta dime equal to timestamp - previousTimestamp
+        this.#previousTimestamp = timestamp;
+        dispatchEvent(Canvas.event);
+        requestAnimationFrame(this.#updateCanvas);
+
     }
 
-    static getCellCoordinates(cell) {
-        return { x: cell.offsetLeft, y: Canvas.gridSizeY - cell.offsetTop - Canvas.pixelScale };
+    static asdf(gameObjects) {
+        gameObjects.forEach(gameObject => {
+            if (gameObject.children.length > 0) {
+                this.asdf(gameObject.children);
+            }
+            
+            gameObject.getComponent(Sprite).forEach( sprite => {
+                sprite.image();
+            });
+        });
     }
 }

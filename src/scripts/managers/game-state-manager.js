@@ -2,10 +2,6 @@ export class GameStateManager {
     static #gameStateEvent = new rxjs.Subject();
     static #isStarted = false;
 
-    get isStarted() {
-        return this.#isStarted;
-    }
-
     static get gameStateEvent() {
         return this.#gameStateEvent;
     }
