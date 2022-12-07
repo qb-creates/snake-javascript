@@ -1,6 +1,5 @@
 import { Time } from "./time.js";
 import { GameStateManager } from "../scripts/managers/game-state-manager.js";
-import { Sprite } from "./sprites.js";
 
 export class Canvas {
     static #canvas = null;

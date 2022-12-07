@@ -1,27 +1,30 @@
-import { Canvas, Input, Vector2 } from "../engine/qbcreates-js-engine.js";
-import AppleGameObject from "./apple/apple-game-object.js";
-import { GameStateManager } from "./managers/game-state-manager.js";
-import { SnakeGameObject, SnakeMovement } from "./snake/snake-exports.js";
-import { Sprite, square } from "../engine/sprites.js";
+// import { Canvas, Input, Vector2 } from "../engine/qbcreates-js-engine.js";
+// import AppleGameObject from "./apple/apple-game-object.js";
+// import { GameStateManager } from "./managers/game-state-manager.js";
+// import { SnakeGameObject, SnakeMovement } from "./snake/snake-exports.js";
+// import { SpriteRenderer, square } from "../engine/sprite-renderer.js";
+
+import { GameObject, Canvas } from "../engine/qbcreates-js-engine.js";
+import { Transform } from "../engine/transform.js";
 
 Canvas.configureCanvas(500, 500, 25);
 
-let snakeGameObject = new SnakeGameObject();
-
-snakeGameObject.addGameObject(makeImage(0, 0, 'red'));
-snakeGameObject.addGameObject(makeImage(1, 0, 'green'));
-snakeGameObject.addGameObject(makeImage(2, 0, 'purple'));
-snakeGameObject.addComponent(new SnakeMovement());
-Canvas.addGameObject(snakeGameObject);
-function makeImage(x, y, color) {
-    let body = new SnakeGameObject();
-    let sprite = new Sprite();
-    body.position = new Vector2(x, y);
-    sprite.color = color;
-    sprite.image = () => { square(body.position.x, body.position.y, sprite.color); }
-    body.addComponent(sprite);
-    return body;
-}
+let snakeGameObject = new GameObject('snakeGameObject');
+snakeGameObject.addComponent(Transform);
+// snakeGameObject.addGameObject(makeImage(0, 0, 'red'));
+// snakeGameObject.addGameObject(makeImage(1, 0, 'green'));
+// snakeGameObject.addGameObject(makeImage(2, 0, 'purple'));
+// snakeGameObject.addComponent(new SnakeMovement());
+// Canvas.addGameObject(snakeGameObject);
+// function makeImage(x, y, color) {
+//     let body = new SnakeGameObject();
+//     let sprite = new Sprite();
+//     body.position = new Vector2(x, y);
+//     sprite.color = color;
+//     sprite.image = () => { square(body.position.x, body.position.y, sprite.color); }
+//     body.addComponent(sprite);
+//     return body;
+// }
 // // Matrix transformation
 // // ctx.translate(112.5, 62.5);
 // // ctx.rotate(Math.PI / 2);

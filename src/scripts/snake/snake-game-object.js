@@ -1,33 +1,30 @@
 import { SnakeCollision, SnakeInput, SnakeMovement, SnakeSize, snakeHeadColor, snakeBodyColor } from "./snake-exports.js";
 import { Canvas, Vector2 } from "../../engine/qbcreates-js-engine.js";
-import { square } from "../../engine/sprites.js"
+import { square } from "../../engine/sprite-renderer.js"
 export class SnakeGameObject {
+    #objectName = '';
     #scriptList = [];
     #children = [];
     #isDestroyed = false;
-    #position = new Vector2(0, 0);
 
-    static get className() {
-        return this.name;
+    get objectName() {
+        return this.#objectName;
+    }
+
+    set objectName(value) {
+        this.#objectName = value;
     }
 
     get isDestroyed() {
-        return this.#isDestroyed;
-    }
-
-    get position() {
-        return this.#position;
-    }
-
-    set position(value) {
-        this.#position = value;
+        return this.#is1Destroyed;
     }
 
     get children() {
         return this.#children;
     }
 
-    constructor() {
+    constructor(objectName) {
+        this.#objectName = objectName;
         // let body = new SnakeGameObject();
         // body.sprite = () => {
         //     body.position = new Vector2(0, 0);
