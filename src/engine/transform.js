@@ -4,7 +4,7 @@ import { Vector2 } from "./vector2.js";
 export class Transform extends Component{
     #position = new Vector2(0, 0);
     #scale = new Vector2(1, 1);
-    #positionChangeEvent = new rxjs.Subject();
+    #previousPosition = new Vector2(0, 0);
 
     get position() {
         return this.#position;
@@ -12,7 +12,11 @@ export class Transform extends Component{
 
     set position(value) {
         this.#position = value;
-        this.#positionChangeEvent.next(value);
+
+        this.gameObject.children.forEach(child => {
+            let distanceMoved = Vector2.subtract(value, this.#previousPosition);
+            child.transform.position = Vector2.add(distanceMoved, child.transform.position); 
+        });
     }
 
     get scale() {
@@ -21,10 +25,6 @@ export class Transform extends Component{
 
     set scale(value) {
         this.#scale = value;
-    }
-
-    get positionChangeEvent() {
-        return this.#positionChangeEvent;
     }
 
     constructor(gameObject) {

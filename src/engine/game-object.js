@@ -5,6 +5,7 @@ export class GameObject {
     #scriptList = [];
     #children = [];
     #isDestroyed = false;
+    #transform = null;
 
     get objectName() {
         return this.#objectName;
@@ -22,9 +23,13 @@ export class GameObject {
         return this.#children;
     }
 
+    get transform() {
+        return this.#transform;
+    }
     constructor(objectName) {
         this.#objectName = objectName;
-        this.#scriptList.push(new Transform(this));
+        this.#transform = new Transform(this)
+        this.#scriptList.push(this.#transform);
     }
 
     addGameObject(gameObject) {
@@ -36,18 +41,28 @@ export class GameObject {
     }
 
     getComponent(componentClass) {
+        return this.#scriptList.find(component => component instanceof componentClass);
+    }
+
+    getComponents(componentClass) {
         return this.#scriptList.filter(component => component instanceof componentClass);
     }
 
     /**
      * This method will create a new instance of a component and attach it to this gameObject.
      * @param {Component} T - Class type of the component you want to created and add to this gameObject.
+     * @returns {Component} Returns the newly created component.
      */
     addComponent(T) {
         if (T === Transform) {
             throw new Error(`Can not add another transform to ${this.#objectName}.`);
         }
-        this.#scriptList.push(new T(this));
+        if (T === SpriteRenderer && this.#scriptList.find(component => component instanceof SpriteRenderer)) {
+            throw new Error(`Can not add another SpriteRenderer to ${this.#objectName}.`);
+        }
+        let component = new T(this);
+        this.#scriptList.push(component);
+        return component
     }
 
     destroy() {

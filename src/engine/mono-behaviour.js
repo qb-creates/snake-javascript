@@ -1,24 +1,11 @@
 import { Time } from "./time.js";
-import { Canvas } from "./canvas.js";
+import { Component } from "./component.js";
 
-export class MonoBehaviour {
-    #gameObject = null;
-    
-    static get className() {
-        return this.name;
-    }
-    
-    set gameObject(gameObject) {
-        if (this.#gameObject == null) {
-            this.#gameObject = gameObject;
-        }
-    }
+export class MonoBehaviour extends Component {
 
-    get gameObject() {
-        return this.#gameObject;
-    }
+    constructor(gameObject) {
+        super(gameObject);
 
-    constructor() {
         setTimeout(() => {
             this.awake();
             this.start();
@@ -28,7 +15,7 @@ export class MonoBehaviour {
             }, Time.fixedDeltaTime * 1000);
 
             addEventListener('canvasUpdate', () => {
-                if (!this.#gameObject.isDestroyed){
+                if (!this.gameObject.isDestroyed){
                     this.update();
                 }
             });

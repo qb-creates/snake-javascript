@@ -1,5 +1,6 @@
 import { Time } from "./time.js";
 import { GameStateManager } from "../scripts/managers/game-state-manager.js";
+import { SpriteRenderer } from "./sprite-renderer.js";
 
 export class Canvas {
     static #canvas = null;
@@ -88,12 +89,12 @@ export class Canvas {
     }
 
     static #updateCanvas = (timestamp) => {
-        this.#context.clearRect(0, 0, this.#canvas.width, this.#canvas.height);
+        this.#context.clearRect(-250, -250, this.#canvas.width, this.#canvas.height);
 
-        if (true) {
+        if (false) {
             for (let i = -20; i < 20; i++) {
                 for (let j = -20; j < 20; j++) {
-                    this.#context.strokeStyle = 'gray';
+                    this.#context.strokeStyle = '#80808011';
 
                     this.#context.beginPath();
                     this.#context.roundRect(i * 25, j * 25, 75, 75, [0]);
@@ -102,7 +103,7 @@ export class Canvas {
             }
         }
 
-        this.asdf(this.#gameObjectList);
+        this.#renderSprites(this.#gameObjectList);
         // TODO set Time.delta dime equal to timestamp - previousTimestamp
         this.#previousTimestamp = timestamp;
         dispatchEvent(Canvas.event);
@@ -110,15 +111,17 @@ export class Canvas {
 
     }
 
-    static asdf(gameObjects) {
+    static #renderSprites(gameObjects) {
         gameObjects.forEach(gameObject => {
             if (gameObject.children.length > 0) {
-                this.asdf(gameObject.children);
+                this.#renderSprites(gameObject.children);
             }
             
-            gameObject.getComponent(Sprite).forEach( sprite => {
-                sprite.image();
-            });
+            let renderer = gameObject.getComponent(SpriteRenderer);
+
+            if (renderer) {
+                renderer.sprite(renderer);
+            }
         });
     }
 }

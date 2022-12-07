@@ -22,4 +22,18 @@ export class Vector2 {
         this.#x = x;
         this.#y = y;
     }
+    
+    static add(vectorA, vectorB) {
+        let x = vectorA.x + vectorB.x;
+        let y = vectorB.y + vectorB.y;
+
+        return new Vector2(x, y);
+    }
+
+    static subtract(vectorA, vectorB) {
+        let x = vectorA.x - vectorB.x;
+        let y = vectorB.y - vectorB.y;
+
+        return new Vector2(x, y);
+    }
 }

@@ -4,31 +4,58 @@
 // import { SnakeGameObject, SnakeMovement } from "./snake/snake-exports.js";
 // import { SpriteRenderer, square } from "../engine/sprite-renderer.js";
 
-import { GameObject, Canvas } from "../engine/qbcreates-js-engine.js";
-import { Transform } from "../engine/transform.js";
+import { GameObject, Canvas, SpriteRenderer, Vector2, Input } from "../engine/qbcreates-js-engine.js";
+import { GameStateManager } from "./managers/game-state-manager.js";
+import { SnakeMovement, SnakeInput, snakeHeadColor, snakeBodyColor } from "./snake/snake-exports.js";
+import { square } from "../engine/sprite-renderer.js";
 
+Input.initialize();
 Canvas.configureCanvas(500, 500, 25);
 
 let snakeGameObject = new GameObject('snakeGameObject');
-snakeGameObject.addComponent(Transform);
-// snakeGameObject.addGameObject(makeImage(0, 0, 'red'));
-// snakeGameObject.addGameObject(makeImage(1, 0, 'green'));
-// snakeGameObject.addGameObject(makeImage(2, 0, 'purple'));
-// snakeGameObject.addComponent(new SnakeMovement());
-// Canvas.addGameObject(snakeGameObject);
-// function makeImage(x, y, color) {
-//     let body = new SnakeGameObject();
-//     let sprite = new Sprite();
-//     body.position = new Vector2(x, y);
-//     sprite.color = color;
-//     sprite.image = () => { square(body.position.x, body.position.y, sprite.color); }
-//     body.addComponent(sprite);
-//     return body;
-// }
-// // Matrix transformation
-// // ctx.translate(112.5, 62.5);
-// // ctx.rotate(Math.PI / 2);
-// // ctx.translate(-112.5, -62.5);
+let snakeBody = new GameObject('snakeBody');
+snakeBody.transform.position = new Vector2(0, 0);
+let spriteRenderer = snakeBody.addComponent(SpriteRenderer);
+spriteRenderer.color = snakeBodyColor;
+spriteRenderer.sprite = (renderer) => {
+    square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, renderer.transform.scale)
+}
+snakeGameObject.children.push(snakeBody);
+
+snakeBody = new GameObject('snakeBody');
+snakeBody.transform.position = new Vector2(1, 0);
+spriteRenderer = snakeBody.addComponent(SpriteRenderer);
+spriteRenderer.color = snakeBodyColor;
+spriteRenderer.sprite = (renderer) => {
+    square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, renderer.transform.scale)
+}
+snakeGameObject.children.push(snakeBody);
+
+snakeBody = new GameObject('snakeBody');
+snakeBody.transform.position = new Vector2(2, 0);
+spriteRenderer = snakeBody.addComponent(SpriteRenderer);
+spriteRenderer.color = snakeHeadColor;
+spriteRenderer.sprite = (renderer) => {
+    square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, renderer.transform.scale)
+}
+snakeGameObject.children.push(snakeBody);
+snakeGameObject.addComponent(SnakeMovement);
+snakeGameObject.addComponent(SnakeInput);
+Canvas.addGameObject(snakeGameObject);
+
+let border = new GameObject('gameBorder');
+border.transform.scale = new Vector2(20, 20);
+border.transform.position = new Vector2(0, 0);
+spriteRenderer = border.addComponent(SpriteRenderer);
+spriteRenderer.color = 'blue';
+spriteRenderer.sprite = (renderer) => {
+    square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, renderer.transform.scale)
+}
+Canvas.addGameObject(border);
+// Matrix transformation
+// ctx.translate(112.5, 62.5);
+// ctx.rotate(Math.PI / 2);
+// ctx.translate(-112.5, -62.5);
 // let n = 25;
 // ctx.strokeStyle = '#FFFF0022';
 // ctx.fillStyle = '#00FF0022';
@@ -120,23 +147,6 @@ snakeGameObject.addComponent(Transform);
  ctx.stroke();
  ctx.fill();
  */
-
-
-
-
-// Canvas.pixelScale = 30;
-// Canvas.gridSizeY = window.innerHeight / 30;
-
-
-// Input.initialize();
-// Canvas.initialize();
-// (function () {
-//     let snakeGameObject = new SnakeGameObject();
-//     Canvas.addGameObject(snakeGameObject);
-
-//     let appleGameObject = new AppleGameObject();
-//     Canvas.addGameObject(appleGameObject);
-// })();
 
 window.onPlay = () => {
     GameStateManager.onGameStart();
