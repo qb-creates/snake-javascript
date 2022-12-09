@@ -1,6 +1,7 @@
-export class Vector2 {
+export class Vector3 {
     #x = 0;
     #y = 0;
+    #z = 0;
 
     get x() {
         return this.#x;
@@ -18,22 +19,31 @@ export class Vector2 {
         this.#y = value;
     }
 
-    constructor(x, y) {
+    get z() {
+        return this.#z;
+    }
+
+    set z(value) {
+        this.#z = value;
+    }
+
+    constructor(x, y, z) {
         this.#x = x;
         this.#y = y;
+        this.#z = z;
     }
 
     static add(vectorA, vectorB) {
         let x = vectorA.x + vectorB.x;
         let y = vectorB.y + vectorB.y;
 
-        return new Vector2(x, y);
+        return new Vector3(x, y);
     }
 
     static subtract(vectorA, vectorB) {
         let x = vectorA.x - vectorB.x;
         let y = vectorB.y - vectorB.y;
 
-        return new Vector2(x, y);
+        return new Vector3(x, y);
     }
 }

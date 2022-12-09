@@ -39,3 +39,48 @@
 
 //     return true;
 // }
+
+
+
+// Circle collision Test
+// let n = 25;
+// let w = 1;
+// let h = 1;
+// let x = 0;
+// let y = 0;
+// Canvas.context.fillRect(x - (w/2), y - (h/2), w, h);
+// // collider 1
+// Canvas.context.beginPath();
+// Canvas.context.strokeStyle = 'green';
+// Canvas.context.moveTo((2 - .5) * n, (0 - .5) * n);
+// Canvas.context.lineTo((2 - .5) * n, (1 - .5)* n);
+// Canvas.context.lineTo((3 - .5) * n, (1 - .5)* n);
+// Canvas.context.lineTo((3 - .5) * n, (0 - .5)* n);
+// Canvas.context.lineTo((2 - .5)  * n,( 0 -.5)* n);
+// Canvas.context.stroke();
+
+// Canvas.context.beginPath();
+// Canvas.context.strokeStyle = 'green';
+// Canvas.context.moveTo((0 - .5) * n, (0 - .5) * n);
+// Canvas.context.lineTo((0 - .5) * n, (1 - .5)* n);
+// Canvas.context.lineTo((1 - .5) * n, (1 - .5)* n);
+// Canvas.context.lineTo((1 - .5) * n, (0 - .5)* n);
+// Canvas.context.lineTo((0 - .5)  * n,( 0 -.5)* n);
+// Canvas.context.stroke();
+
+
+// let n = 25;
+// let w = 1;
+// let h = 1;
+// let x = 0;
+// let y = 0;
+// Canvas.context.fillRect(x - (w/2), y - (h/2), w, h);
+// // collider 1
+// Canvas.context.beginPath();
+// Canvas.context.strokeStyle = 'green';
+// Canvas.context.moveTo((1.914 - .5) * n, (1.2065- .5) * n);
+// Canvas.context.lineTo((1.207 - .5) * n, (1.913 - .5)* n);
+// Canvas.context.lineTo((1.915 - .5) * n, (2.620 - .5)* n);
+// Canvas.context.lineTo((2.621 - .5) * n, (1.913 - .5)* n);
+// Canvas.context.lineTo((1.914 - .5)  * n,( 1.2065 -.5)* n);
+// Canvas.context.stroke();

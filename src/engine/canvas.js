@@ -1,5 +1,4 @@
 import { Time } from "./time.js";
-import { GameStateManager } from "../scripts/managers/game-state-manager.js";
 import { SpriteRenderer } from "./sprite-renderer.js";
 
 export class Canvas {
@@ -46,19 +45,14 @@ export class Canvas {
     static configureCanvas(canvasWidth, canvasHeight, ppu) {
         this.#ppu = ppu;
         this.#canvas = document.createElement('canvas');
-        this.#canvas.style = `border: 5px solid white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);`;
+        this.#canvas.style = `border: 0px solid white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);`;
         this.#canvas.width = canvasWidth;
         this.#canvas.height = canvasHeight;
         this.#context = this.#canvas.getContext('2d');
         this.#context.transform(1, 0, 0, -1, 0, canvasHeight); // flips the axis
         this.#context.translate(canvasWidth / 2, canvasHeight / 2);
         document.body.appendChild(this.#canvas);
-
-        GameStateManager.gameStateEvent.subscribe(isStarted => {
-            if (isStarted) {
-                requestAnimationFrame(this.#updateCanvas);
-            }
-        });
+        requestAnimationFrame(this.#updateCanvas);
     }
 
 
@@ -112,6 +106,7 @@ export class Canvas {
     }
 
     static #renderSprites(gameObjects) {
+        gameObjects.sort((a, b) => (a.transform.position.z > b.transform.position.z) ? 1 : -1);
         gameObjects.forEach(gameObject => {
             if (gameObject.children.length > 0) {
                 this.#renderSprites(gameObject.children);

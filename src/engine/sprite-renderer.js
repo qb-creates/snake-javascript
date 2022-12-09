@@ -1,7 +1,7 @@
 import { Canvas } from "./canvas.js"
 import { Component } from "./component.js";
 import { Transform } from "./transform.js";
-import { Vector2 } from "./vector2.js";
+import { Vector3 } from "./vector3.js";
 
 export class SpriteRenderer extends Component {
     #sprite = () => { };
@@ -38,9 +38,14 @@ export class SpriteRenderer extends Component {
         }
         this.#transform = transform;
     }
+
+    clone(renderer) {
+        renderer.sprite = this.#sprite;
+        renderer.color = this.#color;
+    }
 }
 
-export function square(x, y, color, scale = new Vector2(1, 1)) {
+export function square(x, y, color, scale = new Vector3(1, 1)) {
     let w = Canvas.ppu * scale.x;
     let h = Canvas.ppu * scale.y;
 

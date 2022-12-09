@@ -1,4 +1,4 @@
-import { Canvas, Component, Transform, SpriteRenderer } from "./qbcreates-js-engine.js";
+import { Canvas, Component, Transform, SpriteRenderer, Vector3 } from "./qbcreates-js-engine.js";
 
 export class GameObject {
     #objectName = '';
@@ -25,6 +25,9 @@ export class GameObject {
 
     get transform() {
         return this.#transform;
+    }
+    static asdf() {
+        console.log("quent");
     }
     constructor(objectName) {
         this.#objectName = objectName;
@@ -57,9 +60,11 @@ export class GameObject {
         if (T === Transform) {
             throw new Error(`Can not add another transform to ${this.#objectName}.`);
         }
+
         if (T === SpriteRenderer && this.#scriptList.find(component => component instanceof SpriteRenderer)) {
             throw new Error(`Can not add another SpriteRenderer to ${this.#objectName}.`);
         }
+
         let component = new T(this);
         this.#scriptList.push(component);
         return component
@@ -71,5 +76,24 @@ export class GameObject {
             component = null;
         });
         Canvas.removeGameObject(this);
+    }
+
+    clone() {
+        let clonedObject = new GameObject(this.objectName + " (clone)");
+        
+        clonedObject.transform.position = new Vector3(this.#transform.position.x, this.#transform.position.y, this.#transform.position.z);
+        this.#children.forEach(child => {
+            let clonedChild = child.clone();
+            clonedObject.addGameObject(clonedChild);
+        });
+
+        this.#scriptList.forEach(script => {
+            if (script instanceof SpriteRenderer) {
+                let clonedScript = clonedObject.addComponent(script.constructor);
+                script.clone(clonedScript);
+            }
+        });
+        
+        return clonedObject;
     }
 } 
