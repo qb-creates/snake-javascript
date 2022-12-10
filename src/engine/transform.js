@@ -10,14 +10,19 @@ export class Transform extends Component{
     }
 
     set position(value) {
-        this.#previousPosition = this.#position;
-        this.#position = value;
         this.gameObject.children.forEach(child => {
-            let distanceMoved = Vector3.subtract(value, this.#previousPosition);
+            let distanceMoved = Vector3.subtract(value, this.#position);
+            child.transform.position = Vector3.add(distanceMoved, child.transform.position); 
+        });
+        this.#position = value;
+    }
+
+    update() {
+        this.gameObject.children.forEach(child => {
+            let distanceMoved = Vector3.subtract(this.#position, this.#previousPosition);
             child.transform.position = Vector3.add(distanceMoved, child.transform.position); 
         });
     }
-    
     get scale() {
         return this.#scale;
     }

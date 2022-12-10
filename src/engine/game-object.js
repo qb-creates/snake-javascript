@@ -34,6 +34,7 @@ export class GameObject {
     }
 
     addGameObject(gameObject) {
+        gameObject.transform.position = Vector3.add(gameObject.transform.position, this.transform.position);
         this.#children.push(gameObject);
     }
 

@@ -26,10 +26,10 @@ Canvas.addGameObject(b);
 // Canvas.addGameObject(border);
 
 let enemy = new GameObject("enemy");
+enemy.transform.position = new Vector3(5,5,1);
 enemy.addGameObject(snakeBodyPrefab());
 let testFollow = enemy.addComponent(TestFollow);
 testFollow.target = b;
-enemy.transform.position = new Vector3(5,5,1);
 Canvas.addGameObject(enemy);
 
 // let a = Object.instantiate(b);
