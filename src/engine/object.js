@@ -21,7 +21,6 @@ export class Object {
         if (typeof (position) != 'undefined') {
             gameObject.transform.position = position;
         }
-console.log(clonedObject)
         return clonedObject;
     }
 }

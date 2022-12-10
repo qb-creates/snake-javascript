@@ -1,4 +1,4 @@
-import { Canvas, Component, Transform, SpriteRenderer, Vector3 } from "./qbcreates-js-engine.js";
+import { Canvas, Component, Transform, SpriteRenderer, Vector3, Vector2 } from "./qbcreates-js-engine.js";
 
 export class GameObject {
     #objectName = '';
@@ -26,9 +26,7 @@ export class GameObject {
     get transform() {
         return this.#transform;
     }
-    static asdf() {
-        console.log("quent");
-    }
+    
     constructor(objectName) {
         this.#objectName = objectName;
         this.#transform = new Transform(this)
@@ -82,13 +80,15 @@ export class GameObject {
         let clonedObject = new GameObject(this.objectName + " (clone)");
         
         clonedObject.transform.position = new Vector3(this.#transform.position.x, this.#transform.position.y, this.#transform.position.z);
+        clonedObject.transform.scale = new Vector2(this.#transform.scale.x, this.#transform.scale.y);
+        clonedObject.transform.previousPosition = new Vector3(this.#transform.previousPosition.x, this.#transform.previousPosition.y, this.#transform.previousPosition.z);
         this.#children.forEach(child => {
             let clonedChild = child.clone();
             clonedObject.addGameObject(clonedChild);
         });
 
         this.#scriptList.forEach(script => {
-            if (script instanceof SpriteRenderer) {
+            if (!(script instanceof Transform)) {
                 let clonedScript = clonedObject.addComponent(script.constructor);
                 script.clone(clonedScript);
             }

@@ -43,6 +43,7 @@ export class SnakeMovement extends MonoBehaviour {
             if (this.#movePlayerTimer <= 0) {
                 let headIndex = this.gameObject.children.length - 1
                 let coordinates = this.gameObject.children[headIndex].transform.position;
+                console.log(coordinates.x, "   ", coordinates.y)
                 let headX = coordinates.x + this.#horizontalAxis;
                 let headY = coordinates.y + this.#verticalAxis;
     
@@ -51,8 +52,8 @@ export class SnakeMovement extends MonoBehaviour {
                 
                 if (collisionResult) {
                     let tailTransform = this.gameObject.children[0].transform;
-                    tailTransform.position = new Vector3(headX, headY, tailTransform.z);
-                    
+                 
+                    tailTransform.position = new Vector3(headX, headY, tailTransform.position.z);
                     // Push the tail cell to the front of the array.
                     this.gameObject.children.push(this.gameObject.children.shift());
                     

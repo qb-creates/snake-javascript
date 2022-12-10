@@ -33,4 +33,7 @@ export class MonoBehaviour extends Component {
 
     fixedUpdate() {
     }
+
+    clone() {
+    }
 }

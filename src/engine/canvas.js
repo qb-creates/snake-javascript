@@ -106,7 +106,10 @@ export class Canvas {
     }
 
     static #renderSprites(gameObjects) {
-        gameObjects.sort((a, b) => (a.transform.position.z > b.transform.position.z) ? 1 : -1);
+        gameObjects.sort((gameObjectA, gameObjectB) => {
+            return gameObjectA.transform.position.z - gameObjectB.transform.position.z;
+        });
+
         gameObjects.forEach(gameObject => {
             if (gameObject.children.length > 0) {
                 this.#renderSprites(gameObject.children);

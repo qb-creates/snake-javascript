@@ -1,5 +1,6 @@
 import { MonoBehaviour, Input, KeyCode, Canvas } from "../../engine/qbcreates-js-engine.js";
 import { GameStateManager } from "../managers/game-state-manager.js";
+
 export class SnakeCollision extends MonoBehaviour{
     #canGoLeft = true;
     #canGoRight = true;
