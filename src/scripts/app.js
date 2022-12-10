@@ -15,15 +15,15 @@ Canvas.configureCanvas(500, 500, 25);
 let b = snake();
 Canvas.addGameObject(b);
 
-// let border = new GameObject('gameBorder');
-// border.transform.scale = new Vector2(19.5, 19.5);
-// border.transform.position = new Vector3(0, 0, 0);
-// let spriteRenderer = border.addComponent(SpriteRenderer);
-// spriteRenderer.color = '#9BBA5A';
-// spriteRenderer.sprite = (renderer) => {
-//     square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, renderer.transform.scale)
-// }
-// Canvas.addGameObject(border);
+let border = new GameObject('gameBorder');
+border.transform.scale = new Vector2(19.5, 19.5);
+border.transform.position = new Vector3(0, 0, 0);
+let spriteRenderer = border.addComponent(SpriteRenderer);
+spriteRenderer.color = '#1E1E1E';
+spriteRenderer.sprite = (renderer) => {
+    square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'transparent', renderer.transform.scale)
+}
+Canvas.addGameObject(border);
 
 let enemy = new GameObject("enemy");
 enemy.transform.position = new Vector3(5,5,1);
@@ -32,6 +32,45 @@ let testFollow = enemy.addComponent(TestFollow);
 testFollow.target = b;
 Canvas.addGameObject(enemy);
 
+const someMethod = Symbol()
+const someProperty = Symbol()
+const somePropertys = Symbol()
+const symbols = {protectedMethod: Symbol()}
+class Parent {
+    constructor () {
+      this[someProperty] = 'and a private property'
+    }
+  
+    [someMethod] () {
+      console.log('this is a private method')
+      console.log(this[someProperty])
+    }
+  
+    [somePropertys] () {
+      console.log('I am the parent')
+    }
+  
+    callPrivateMethod () {
+      this[someMethod]()
+    }
+  }
+class Child extends Parent{
+    [somePropertys] () {
+      console.log('I am the child')
+      super[somePropertys]()
+    }
+  
+    callProtectedMethod () {
+      this[somePropertys]()
+    }
+  }
+
+
+let child = new Child();
+child.callProtectedMethod();
+
+let parent = new Parent();
+parent[somePropertys]();
 // let a = Object.instantiate(b);
 // a.transform.position = new Vector3(6, 3, 1);
 // Canvas.addGameObject(a);
@@ -149,7 +188,7 @@ function snake() {
     snakeTail.getComponent(SpriteRenderer).color = snakeBodyColor;
     snakeTail.getComponent(SpriteRenderer).sprite(snakeTail.getComponent(SpriteRenderer));
     snakeGameObject.addGameObject(snakeTail);
-
+    
     let snakeBody = snakeBodyPrefab();
     snakeBody.transform.position = new Vector3(1, 0, 1);
     snakeBody.transform.scale = new Vector2(.8, .8);
@@ -175,7 +214,7 @@ function snakeBodyPrefab() {
     let spriteRenderer = snakeBody.addComponent(SpriteRenderer);
     spriteRenderer.color = snakeBodyColor;
     spriteRenderer.sprite = (renderer) => {
-        square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, renderer.transform.scale)
+        square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'red', renderer.transform.scale)
     }
     return snakeBody;
 }

@@ -45,7 +45,7 @@ export class SpriteRenderer extends Component {
     }
 }
 
-export function square(x, y, color, scale = new Vector3(1, 1)) {
+export function square(x, y, color, borderColor, scale = new Vector3(1, 1)) {
     let w = Canvas.ppu * scale.x;
     let h = Canvas.ppu * scale.y;
 
@@ -53,7 +53,7 @@ export function square(x, y, color, scale = new Vector3(1, 1)) {
     y = (Canvas.ppu * y) + ((Canvas.ppu - h) / 2);
 
     Canvas.context.fillStyle = color;
-    Canvas.context.strokeStyle = 'transparent';
+    Canvas.context.strokeStyle = borderColor;
     Canvas.context.beginPath();
     Canvas.context.roundRect(x - (Canvas.ppu / 2) , y - (Canvas.ppu / 2), w , h, 5);
     Canvas.context.stroke();

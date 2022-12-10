@@ -8,7 +8,7 @@ export class SnakeMovement extends MonoBehaviour {
     #snakeSize = null;
     #verticalAxis = 0;
     #horizontalAxis = 1;
-    #movePlayerTimer = 2;
+    #movePlayerTimer = 0;
     #currentDirection = new Vector2(0, 1);
 
     get currentDirection() {
@@ -37,13 +37,12 @@ export class SnakeMovement extends MonoBehaviour {
 
     update() {
         if (this.#play) {
-            this.#movePlayerTimer -= Time.fixedDeltaTime;
+            this.#movePlayerTimer += Time.fixedDeltaTime;
     
             // if (this.#movePlayerTimer <= 0 && !this.#snakeSize.isGrowing) {
-            if (this.#movePlayerTimer <= 0) {
+            if (this.#movePlayerTimer >= .11) {
                 let headIndex = this.gameObject.children.length - 1
                 let coordinates = this.gameObject.children[headIndex].transform.position;
-                console.log(coordinates.x, "   ", coordinates.y)
                 let headX = coordinates.x + this.#horizontalAxis;
                 let headY = coordinates.y + this.#verticalAxis;
     
@@ -67,7 +66,7 @@ export class SnakeMovement extends MonoBehaviour {
                     this.gameObject.children[0].transform.scale = new Vector2(.6, .6);
                     
                     this.#currentDirection = new Vector2(this.#horizontalAxis, this.#verticalAxis);
-                    this.#movePlayerTimer = .11;
+                    this.#movePlayerTimer = 0;
                 } else {
                     GameStateManager.onGameOver();
                 }

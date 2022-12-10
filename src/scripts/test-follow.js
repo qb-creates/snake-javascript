@@ -27,8 +27,8 @@ export class TestFollow extends MonoBehaviour{
         if (this.#play) {
             let step = this.speed * Time.deltaTime;
             let myTarg = this.#target.children[this.#target.children.length - 1];
-            let placeholder = Vector3.subtract(myTarg.transform.position, this.gameObject.transform.position).normalize();
-            this.gameObject.transform.position = Vector3.add(this.gameObject.transform.position, Vector3.multiply(placeholder, step));
+            let placeholder = Vector3.subtract(myTarg.transform.position, this.transform.position).normalize();
+            this.transform.position = Vector3.add(this.transform.position, Vector3.multiply(placeholder, step));
         }
     }
 }

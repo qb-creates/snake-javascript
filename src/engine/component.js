@@ -1,4 +1,5 @@
 export class Component {
+    #transform = null;
     #enabled = true;
     #gameObject = null;
 
@@ -14,7 +15,12 @@ export class Component {
         return this.#gameObject;
     }
 
+    get transform() {
+        return this.#transform;
+    }
+
     constructor(gameObject) {
         this.#gameObject = gameObject;
+        this.#transform = this.#gameObject.transform;
     }
 }
