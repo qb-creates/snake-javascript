@@ -39,7 +39,7 @@ export default class AppleBehaviour extends MonoBehaviour {
             snakeSize.grow();
 
             let appleGameObject = new AppleGameObject();
-            Canvas.addGameObject(appleGameObject);
+            //Canvas.addGameObject(appleGameObject);
             ScoreManager.addPoint();
         }
     }

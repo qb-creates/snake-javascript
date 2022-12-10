@@ -16,6 +16,7 @@ export class SnakeMovement extends MonoBehaviour {
     }
 
     set horizontalAxis(newHorizontalAxis) {
+        console.log(this.gameObject)
         this.#horizontalAxis = newHorizontalAxis;
     }
 

@@ -75,15 +75,19 @@ export class Canvas {
 
     static removeGameObject(gameObject) {
         let index = this.#gameObjectList.indexOf(gameObject);
-        this.#gameObjectList[index] = null;
-        this.#gameObjectList.splice(index, 1);
-        gameObject.cells.forEach(cell => {
-            this.stageContainer.removeChild(cell.uiReference);
-        })
+
+        if (index >= 0) {
+            this.#gameObjectList[index].children.forEach(child => {
+                child.destroy();
+            });
+
+            this.#gameObjectList[index] = null;
+            this.#gameObjectList.splice(index, 1);
+        }
     }
 
     static #updateCanvas = (timestamp) => {
-        this.#context.clearRect(-250, -250, this.#canvas.width, this.#canvas.height);
+        this.#context.clearRect(-this.#canvas.width / 2, -this.#canvas.height / 2, this.#canvas.width, this.#canvas.height);
 
         if (false) {
             for (let i = -20; i < 20; i++) {
@@ -109,12 +113,8 @@ export class Canvas {
         gameObjects.sort((gameObjectA, gameObjectB) => {
             return gameObjectA.transform.position.z - gameObjectB.transform.position.z;
         });
-
+        console.log(gameObjects)
         gameObjects.forEach(gameObject => {
-            if (gameObject.children.length > 0) {
-                this.#renderSprites(gameObject.children);
-            }
-            
             let renderer = gameObject.getComponent(SpriteRenderer);
 
             if (renderer) {

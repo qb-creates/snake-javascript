@@ -6,7 +6,6 @@ import { Vector3 } from "./vector3.js";
 export class SpriteRenderer extends Component {
     #sprite = () => { };
     #color = 'blue';
-    #transform = null;
 
     get sprite() {
         return this.#sprite;
@@ -25,18 +24,8 @@ export class SpriteRenderer extends Component {
         this.#color = value
     }
 
-    get transform() {
-        return this.#transform;
-    }
-
     constructor(gameObject) {
         super(gameObject);
-        let transform = gameObject.getComponent(Transform);
-
-        if (!transform) {
-            throw new Error(`No transform attached to ${gameObject.objectName}`);
-        }
-        this.#transform = transform;
     }
 
     clone(renderer) {
