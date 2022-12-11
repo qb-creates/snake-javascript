@@ -34,6 +34,10 @@ export class MonoBehaviour extends Component {
     fixedUpdate() {
     }
 
+    onTriggerEnter() {
+
+    }
+    
     clone() {
     }
 }

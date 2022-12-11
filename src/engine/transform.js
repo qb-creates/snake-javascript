@@ -1,7 +1,7 @@
-import { BoxCollider, Component, Vector2, Vector3 } from "./qbcreates-js-engine.js";
+import { BoxCollider, Component, Vector2 } from "./qbcreates-js-engine.js";
 
 export class Transform extends Component{
-    #position = new Vector3(0, 0, 0);
+    #position = new Vector2(0, 0);
     #scale = new Vector2(1, 1);
 
     get position() {
@@ -10,13 +10,13 @@ export class Transform extends Component{
 
     set position(value) {
         this.gameObject.getComponents(BoxCollider).forEach(collider => {
-            let distanceMoved = Vector3.subtract(value, this.#position);
-            collider.position = Vector3.add(distanceMoved, collider.position);
+            let distanceMoved = Vector2.subtract(value, this.#position);
+            collider.position = Vector2.add(distanceMoved, collider.position);
         });
 
         this.gameObject.children.forEach(child => {
-            let distanceMoved = Vector3.subtract(value, this.#position);
-            child.transform.position = Vector3.add(distanceMoved, child.transform.position); 
+            let distanceMoved = Vector2.subtract(value, this.#position);
+            child.transform.position = Vector2.add(distanceMoved, child.transform.position); 
         });
         this.#position = value;
     }

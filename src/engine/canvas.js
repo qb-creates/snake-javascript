@@ -1,6 +1,7 @@
 import { Time } from "./time.js";
 import { SpriteRenderer } from "./sprite-renderer.js";
 import { BoxCollider } from "./box-collider.js";
+import { MonoBehaviour } from "./mono-behaviour.js";
 
 export class Canvas {
     static #canvas = null;
@@ -56,20 +57,6 @@ export class Canvas {
         requestAnimationFrame(this.#updateCanvas);
     }
 
-
-
-    static checkForCollisions(coordinates) {
-        // return this.#gameObjectList.filter((object) => {
-        //     let result = false;
-        //     object.cells.forEach(cell => {
-        //         if (cell.position.x == coordinates.x && cell.position.y == coordinates.y) {
-        //             result = true;
-        //         }
-        //     });
-        //     return result;
-        // })
-    }
-
     static addGameObject(gameObject) {
         this.#gameObjectList.push(gameObject);
     }
@@ -104,6 +91,7 @@ export class Canvas {
 
         this.#renderSprites(this.#gameObjectList);
         // TODO set Time.delta dime equal to timestamp - previousTimestamp
+        // console.log(timestamp - this.#previousTimestamp);
         this.#previousTimestamp = timestamp;
         dispatchEvent(Canvas.event);
         requestAnimationFrame(this.#updateCanvas);
@@ -115,15 +103,43 @@ export class Canvas {
             return gameObjectA.layer - gameObjectB.layer;
         });
 
-        gameObjects.forEach(gameObject => {
+        gameObjects.forEach((gameObject, index) => {
             let renderer = gameObject.getComponent(SpriteRenderer);
 
             if (renderer) {
                 renderer.sprite(renderer);
             }
+            
+            gameObject.getComponents(BoxCollider).forEach((collider) => {
+                collider.render();
+                gameObjects.forEach(gameObject2 => {
+                    gameObject2.getComponents(BoxCollider).forEach(collider2 =>{
+                        if(collider.test != collider2.test) {
+                            if (collider.checkForCollision(collider2)) {
+                                collider.gameObject.getComponents(MonoBehaviour).forEach(mono => {
+                                    mono.onTriggerEnter(collider2);
+                                })
+                                collider2.gameObject.getComponents(MonoBehaviour).forEach(mono => {
+                                    mono.onTriggerEnter(collider2);
+                                })
 
-            gameObject.getComponents(BoxCollider).forEach(collider => {
-                collider.draw();
+                                gameObjects.forEach(asdf => {
+  
+                                    
+                                    if (asdf.children.find(c => c == collider.gameObject) != 'undefined' || asdf.children.find(c => c == collider2.gameObject) != 'undefined') {
+                                        
+                                        asdf.getComponents(MonoBehaviour).forEach(mono => {
+                                            
+                                            mono.onTriggerEnter(collider2);
+                                        })
+                                    }
+                                })
+                            } else {
+                            }
+                        }
+                    })
+                });
+                //collider.checkForCollisions()
             });
         });
     }

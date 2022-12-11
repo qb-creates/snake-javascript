@@ -1,4 +1,4 @@
-import { MonoBehaviour, SpriteRenderer, Time, Vector3, Vector2 } from "../../engine/qbcreates-js-engine.js";
+import { MonoBehaviour, SpriteRenderer, Time, Vector2 } from "../../engine/qbcreates-js-engine.js";
 import { GameStateManager } from "../managers/game-state-manager.js";
 import { SnakeCollision, SnakeSize, snakeHeadColor, snakeBodyColor } from "./snake-exports.js";
 
@@ -52,7 +52,7 @@ export class SnakeMovement extends MonoBehaviour {
                 if (collisionResult) {
                     let tailTransform = this.gameObject.children[0].transform;
                  
-                    tailTransform.position = new Vector3(headX, headY, tailTransform.position.z);
+                    tailTransform.position = new Vector2(headX, headY, tailTransform.position.z);
                     // Push the tail cell to the front of the array.
                     this.gameObject.children.push(this.gameObject.children.shift());
                     
@@ -71,6 +71,11 @@ export class SnakeMovement extends MonoBehaviour {
                     GameStateManager.onGameOver();
                 }
             }
+        }
+    }
+    onTriggerEnter(collider) {
+        if (collider.gameObject.objectName.includes('enemy')) {
+            console.log('enemy hit');
         }
     }
 }

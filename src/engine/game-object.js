@@ -1,4 +1,4 @@
-import { Canvas, Component, Transform, SpriteRenderer, Vector3, Vector2 } from "./qbcreates-js-engine.js";
+import { Canvas, Component, Transform, SpriteRenderer, Vector2 } from "./qbcreates-js-engine.js";
 
 export class GameObject {
     #objectName = '';
@@ -43,7 +43,7 @@ export class GameObject {
     }
 
     addGameObject(gameObject) {
-        gameObject.transform.position = Vector3.add(gameObject.transform.position, this.transform.position);
+        gameObject.transform.position = Vector2.add(gameObject.transform.position, this.transform.position);
         this.#children.push(gameObject);
     }
 

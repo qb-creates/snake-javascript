@@ -1,5 +1,5 @@
 
-import { MonoBehaviour, Canvas, Time, Input, KeyCode, Vector3 } from "../engine/qbcreates-js-engine.js";
+import { MonoBehaviour, Canvas, Time, Input, KeyCode, Vector2 } from "../engine/qbcreates-js-engine.js";
 import { GameStateManager } from "./managers/game-state-manager.js";
 
 export class TestFollow extends MonoBehaviour{
@@ -24,11 +24,11 @@ export class TestFollow extends MonoBehaviour{
     }
 
     update() {
-        if (this.#play) {
+        if (true) {
             let step = this.speed * Time.deltaTime;
-            let myTarg = this.#target.children[this.#target.children.length - 1];
-            let placeholder = Vector3.subtract(myTarg.transform.position, this.transform.position).normalize();
-            this.transform.position = Vector3.add(this.transform.position, Vector3.multiply(placeholder, step));
+            let myTarg = this.#target.children[0];
+            let placeholder = Vector2.subtract(myTarg.transform.position, this.transform.position).normalize();
+            this.transform.position = Vector2.add(this.transform.position, Vector2.multiply(placeholder, step));
         }
     }
 }

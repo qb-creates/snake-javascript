@@ -1,10 +1,10 @@
-import { Component, Vector2, Vector3, Canvas } from "./qbcreates-js-engine.js";
+import { Component, Vector2, Canvas } from "./qbcreates-js-engine.js";
 
 export class BoxCollider extends Component {
-    #position = new Vector3(0, 0, 0);
+    #position = new Vector2(0, 0);
     #scale = new Vector2(1, 1);
-    draw = null;
-
+    #render = null;
+    test = 0;
     get position() {
         return this.#position;
     }
@@ -13,26 +13,61 @@ export class BoxCollider extends Component {
         this.#position = value;
     }
 
-    constructor(gameObject) {
-        super(gameObject)
-        this.#position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
-        this.#scale = new Vector2(gameObject.transform.scale.x, gameObject.transform.scale.y)
-        this.draw = () => {
-            this.square(this.#position.x, this.#position.y, gameObject.transform.scale)
-        };
-        this.draw();
+    get scale() {
+        return this.#scale;
     }
 
-    square(x, y, scale) {
+    set scale(value) {
+        this.#scale = value;
+    }
+
+    get render() {
+        return this.#render;
+    }
+
+    constructor(gameObject) {
+        super(gameObject)
+        this.#position = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
+        this.#scale = new Vector2(gameObject.transform.scale.x, gameObject.transform.scale.y)
+        this.#render = () => {
+            this.#onRender(this.#position.x, this.#position.y, gameObject.transform.scale)
+        };
+    }
+
+    checkForCollision(collider) {
+
+        let l1 = new Vector2(this.#position.x - .5, this.#position.y - .5 + this.#scale.y);
+        let r1 = new Vector2(this.#position.x + this.#scale.x- .5, this.#position.y - .5)
+        let l2 = new Vector2(collider.#position.x - .5, collider.#position.y - .5 + collider.scale.y);
+        let r2 = new Vector2(collider.#position.x + collider.#scale.x - .5, collider.#position.y - .5);
+
+        // if rectangle has area 0, no overlap
+        if (l1.x == r1.x || l1.y == r1.y || r2.x == l2.x || l2.y == r2.y)
+            return false;
+
+        // If one rectangle is on left side of other
+        if (l1.x > r2.x || l2.x > r1.x) {
+            return false;
+        }
+
+        // If one rectangle is above other
+        if (r1.y > l2.y || r2.y > l1.y) {
+            return false;
+        }
+
+        return true;
+    }
+
+    #onRender(x, y, scale) {
         let w = Canvas.ppu * scale.x;
         let h = Canvas.ppu * scale.y;
 
         x = (Canvas.ppu * x) + ((Canvas.ppu - w) / 2);
         y = (Canvas.ppu * y) + ((Canvas.ppu - h) / 2);
-        Canvas.context.lineWidth = 2.5;
+        Canvas.context.lineWidth = 2;
         Canvas.context.strokeStyle = 'green';
         Canvas.context.beginPath();
-        Canvas.context.roundRect(x - (Canvas.ppu / 2), y - (Canvas.ppu / 2), w, h, 5);
+        Canvas.context.roundRect(x - (Canvas.ppu / 2), y - (Canvas.ppu / 2), w, h);
         Canvas.context.stroke();
         Canvas.context.lineWidth = 1;
     }

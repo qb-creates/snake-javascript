@@ -1,16 +1,16 @@
-import { GameObject, Vector3, Vector2, Component, Transform, Canvas } from "./qbcreates-js-engine.js";
+import { GameObject, Vector2, Component, Transform, Canvas } from "./qbcreates-js-engine.js";
 
 export class Object {
     /**
      * @param {GameObject} originalGameObject 
      * @param {GameObject} parent 
-     * @param {Vector3} position 
+     * @param {Vector2} position 
      * @returns 
      */
     static instantiate(originalGameObject, parent, position) {
         let clonedObject = new GameObject(originalGameObject.objectName + " (clone)");
         clonedObject.layer = originalGameObject.layer;
-        clonedObject.transform.position = new Vector3(originalGameObject.transform.position.x, originalGameObject.transform.position.y, originalGameObject.transform.position.z);
+        clonedObject.transform.position = new Vector2(originalGameObject.transform.position.x, originalGameObject.transform.position.y);
         clonedObject.transform.scale = new Vector2(originalGameObject.transform.scale.x, originalGameObject.transform.scale.y);
         originalGameObject.children.forEach(child => {
             Object.instantiate(child, clonedObject);
