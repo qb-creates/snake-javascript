@@ -1,4 +1,42 @@
+import { Component, Vector2, Vector3, Canvas } from "./qbcreates-js-engine.js";
 
+export class BoxCollider extends Component {
+    #position = new Vector3(0, 0, 0);
+    #scale = new Vector2(1, 1);
+    draw = null;
+
+    get position() {
+        return this.#position;
+    }
+
+    set position(value) {
+        this.#position = value;
+    }
+
+    constructor(gameObject) {
+        super(gameObject)
+        this.#position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z);
+        this.#scale = new Vector2(gameObject.transform.scale.x, gameObject.transform.scale.y)
+        this.draw = () => {
+            this.square(this.#position.x, this.#position.y, gameObject.transform.scale)
+        };
+        this.draw();
+    }
+
+    square(x, y, scale) {
+        let w = Canvas.ppu * scale.x;
+        let h = Canvas.ppu * scale.y;
+
+        x = (Canvas.ppu * x) + ((Canvas.ppu - w) / 2);
+        y = (Canvas.ppu * y) + ((Canvas.ppu - h) / 2);
+        Canvas.context.lineWidth = 2.5;
+        Canvas.context.strokeStyle = 'green';
+        Canvas.context.beginPath();
+        Canvas.context.roundRect(x - (Canvas.ppu / 2), y - (Canvas.ppu / 2), w, h, 5);
+        Canvas.context.stroke();
+        Canvas.context.lineWidth = 1;
+    }
+}
 // /* Driver program to test above function */
 
 // var l1 = new Point(), r1 = new Point(),

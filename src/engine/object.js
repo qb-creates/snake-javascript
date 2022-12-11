@@ -9,6 +9,7 @@ export class Object {
      */
     static instantiate(originalGameObject, parent, position) {
         let clonedObject = new GameObject(originalGameObject.objectName + " (clone)");
+        clonedObject.layer = originalGameObject.layer;
         clonedObject.transform.position = new Vector3(originalGameObject.transform.position.x, originalGameObject.transform.position.y, originalGameObject.transform.position.z);
         clonedObject.transform.scale = new Vector2(originalGameObject.transform.scale.x, originalGameObject.transform.scale.y);
         originalGameObject.children.forEach(child => {

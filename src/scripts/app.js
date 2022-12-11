@@ -4,7 +4,7 @@
 // import { SnakeGameObject, SnakeMovement } from "./snake/snake-exports.js";
 // import { SpriteRenderer, square } from "../engine/sprite-renderer.js";
 
-import { GameObject, Canvas, SpriteRenderer, Vector3, Vector2, Input, Object, Component } from "../engine/qbcreates-js-engine.js";
+import { GameObject, Canvas, SpriteRenderer, Vector3, Vector2, Input, Object, Component, BoxCollider } from "../engine/qbcreates-js-engine.js";
 import { GameStateManager } from "./managers/game-state-manager.js";
 import { SnakeMovement, SnakeInput, snakeHeadColor, snakeBodyColor } from "./snake/snake-exports.js";
 import { square } from "../engine/sprite-renderer.js";
@@ -12,10 +12,15 @@ import { TestFollow } from "./test-follow.js";
 
 Input.initialize();
 Canvas.configureCanvas(500, 500, 25);
-let a = Object.instantiate(snake());
+let player = Object.instantiate(snake());
 
-let b = Object.instantiate(enemy());
-b.getComponent(TestFollow).target = a;
+player.children.forEach(child => {
+  child.addComponent(BoxCollider);
+});
+
+let enemyObject = Object.instantiate(enemy());
+enemyObject.addComponent(BoxCollider);
+enemyObject.getComponent(TestFollow).target = player;
 
 Object.instantiate(border());
 
@@ -130,22 +135,26 @@ window.onPlay = () => {
 function snake() {
   let snakeGameObject = new GameObject('snakeGameObject');
   snakeGameObject.transform.position = new Vector3(0, 0, 1);
+  snakeGameObject.layer = 1;
 
   let snakeTail = snakeBodyPrefab();
+  snakeTail.layer = 1;
   snakeTail.transform.position = new Vector3(0, 0, 1);
   snakeTail.transform.scale = new Vector2(.6, .6);
   snakeTail.getComponent(SpriteRenderer).color = snakeBodyColor;
   snakeTail.getComponent(SpriteRenderer).sprite(snakeTail.getComponent(SpriteRenderer));
   snakeGameObject.addGameObject(snakeTail);
-
+  
   let snakeBody = snakeBodyPrefab();
+  snakeBody.layer = 1;
   snakeBody.transform.position = new Vector3(1, 0, 1);
   snakeBody.transform.scale = new Vector2(.8, .8);
   snakeBody.getComponent(SpriteRenderer).color = snakeBodyColor;
   snakeBody.getComponent(SpriteRenderer).sprite(snakeBody.getComponent(SpriteRenderer));
   snakeGameObject.addGameObject(snakeBody);
-
+  
   let snakeHead = snakeBodyPrefab();
+  snakeHead.layer = 1;
   snakeHead.transform.position = new Vector3(2, 0, 1);
   snakeHead.getComponent(SpriteRenderer).color = snakeHeadColor;
   snakeHead.getComponent(SpriteRenderer).sprite(snakeHead.getComponent(SpriteRenderer));
@@ -163,17 +172,18 @@ function snakeBodyPrefab() {
   let spriteRenderer = snakeBody.addComponent(SpriteRenderer);
   spriteRenderer.color = snakeBodyColor;
   spriteRenderer.sprite = (renderer) => {
-    square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'red', renderer.transform.scale)
+    square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'transparent', renderer.transform.scale)
   }
   return snakeBody;
 }
 
 function enemy(target) {
   let enemy = new GameObject("enemy");
+  enemy.layer = 2;
   enemy.transform.position = new Vector3(5, 5, 1);
   let spriteRenderer = enemy.addComponent(SpriteRenderer);
   spriteRenderer.sprite = (renderer) => {
-    square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'red', renderer.transform.scale);
+    square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'transparent', renderer.transform.scale);
   }
   let testFollow = enemy.addComponent(TestFollow);
   testFollow.target = target;

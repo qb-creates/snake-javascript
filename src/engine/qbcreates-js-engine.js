@@ -9,3 +9,4 @@ export { Component } from "./component.js";
 export { Transform } from "./transform.js";
 export { SpriteRenderer } from "./sprite-renderer.js";
 export { Object } from "./object.js";
+export { BoxCollider } from "./box-collider.js";

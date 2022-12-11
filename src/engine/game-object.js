@@ -6,11 +6,20 @@ export class GameObject {
     #children = [];
     #isDestroyed = false;
     #transform = null;
+    #layer = 0;
 
     get objectName() {
         return this.#objectName;
     }
 
+    get layer() {
+        return this.#layer;
+    }
+
+    set layer(value) {
+        this.#layer = value;
+    }
+    
     set objectName(value) {
         this.#objectName = value;
     }

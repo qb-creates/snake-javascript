@@ -1,5 +1,6 @@
 import { Time } from "./time.js";
 import { SpriteRenderer } from "./sprite-renderer.js";
+import { BoxCollider } from "./box-collider.js";
 
 export class Canvas {
     static #canvas = null;
@@ -58,15 +59,15 @@ export class Canvas {
 
 
     static checkForCollisions(coordinates) {
-        return this.#gameObjectList.filter((object) => {
-            let result = false;
-            object.cells.forEach(cell => {
-                if (cell.position.x == coordinates.x && cell.position.y == coordinates.y) {
-                    result = true;
-                }
-            });
-            return result;
-        })
+        // return this.#gameObjectList.filter((object) => {
+        //     let result = false;
+        //     object.cells.forEach(cell => {
+        //         if (cell.position.x == coordinates.x && cell.position.y == coordinates.y) {
+        //             result = true;
+        //         }
+        //     });
+        //     return result;
+        // })
     }
 
     static addGameObject(gameObject) {
@@ -111,15 +112,19 @@ export class Canvas {
 
     static #renderSprites(gameObjects) {
         gameObjects.sort((gameObjectA, gameObjectB) => {
-            return gameObjectA.transform.position.z - gameObjectB.transform.position.z;
+            return gameObjectA.layer - gameObjectB.layer;
         });
-        console.log(gameObjects)
+
         gameObjects.forEach(gameObject => {
             let renderer = gameObject.getComponent(SpriteRenderer);
 
             if (renderer) {
                 renderer.sprite(renderer);
             }
+
+            gameObject.getComponents(BoxCollider).forEach(collider => {
+                collider.draw();
+            });
         });
     }
 }
