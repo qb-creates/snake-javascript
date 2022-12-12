@@ -26,6 +26,15 @@ export class Transform extends Component{
     }
 
     set scale(value) {
+        this.gameObject.getComponents(BoxCollider).forEach(collider => {
+            let distanceMoved = Vector2.subtract(value, this.#scale);
+            collider.scale = Vector2.add(distanceMoved, collider.scale);
+        });
+
+        this.gameObject.children.forEach(child => {
+            let distanceMoved = Vector2.subtract(value, this.#scale);
+            child.transform.scale = Vector2.add(distanceMoved, child.transform.scale); 
+        });
         this.#scale = value;
     }
 

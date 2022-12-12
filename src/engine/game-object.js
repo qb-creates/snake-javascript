@@ -1,4 +1,4 @@
-import { Canvas, Component, Transform, SpriteRenderer, Vector2 } from "./qbcreates-js-engine.js";
+import { Canvas, Component, Transform, SpriteRenderer, Vector2, BoxCollider } from "./qbcreates-js-engine.js";
 
 export class GameObject {
     #objectName = '';
@@ -12,6 +12,10 @@ export class GameObject {
         return this.#objectName;
     }
 
+    set objectName(value) {
+        this.#objectName = value;
+    }
+
     get layer() {
         return this.#layer;
     }
@@ -20,10 +24,6 @@ export class GameObject {
         this.#layer = value;
     }
     
-    set objectName(value) {
-        this.#objectName = value;
-    }
-
     get isDestroyed() {
         return this.#isDestroyed;
     }
@@ -75,6 +75,10 @@ export class GameObject {
 
         let component = new T(this);
         this.#scriptList.push(component);
+
+        if (component instanceof BoxCollider) {
+            Canvas.addCollider(component);
+        }
         return component
     }
 

@@ -3,6 +3,10 @@ export class Component {
     #enabled = true;
     #gameObject = null;
 
+    get gameObject() {
+        return this.#gameObject;
+    }
+
     get enabled() {
         return this.#enabled;
     }
@@ -11,12 +15,12 @@ export class Component {
         this.#enabled = value;
     }
 
-    get gameObject() {
-        return this.#gameObject;
-    }
-
     get transform() {
         return this.#transform;
+    }
+
+    set transform(value) {
+        this.#transform = value;
     }
 
     constructor(gameObject) {

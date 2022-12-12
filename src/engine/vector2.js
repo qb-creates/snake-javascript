@@ -47,6 +47,9 @@ export class Vector2 {
      * @returns Return the vector normalized where its magnitude is equal to 1 unit.
      */
     normalize() {
+        if (this.magnitude == 0) {
+            return new Vector2(0, 0);
+        }
         let xN = this.#x / this.magnitude;
         let yN = this.#y / this.magnitude;
 

@@ -38,6 +38,10 @@ export class MonoBehaviour extends Component {
 
     }
     
+    onTriggerExit() {
+        
+    }
+
     clone() {
     }
 }

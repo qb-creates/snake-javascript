@@ -4,6 +4,10 @@ export class BoxCollider extends Component {
     #position = new Vector2(0, 0);
     #scale = new Vector2(1, 1);
     #render = null;
+    collisionList = new Map();
+    #metaData = '';
+    previousListCount = 0;
+
     test = 0;
     get position() {
         return this.#position;
@@ -25,37 +29,55 @@ export class BoxCollider extends Component {
         return this.#render;
     }
 
+    get metaData() {
+        return this.#metaData;
+    }
+
     constructor(gameObject) {
         super(gameObject)
         this.#position = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
         this.#scale = new Vector2(gameObject.transform.scale.x, gameObject.transform.scale.y)
         this.#render = () => {
-            this.#onRender(this.#position.x, this.#position.y, gameObject.transform.scale)
+            this.#onRender(this.#position.x, this.#position.y, this.#scale)
         };
+        this.#metaData = this.#createUUID();
     }
 
     checkForCollision(collider) {
+        this.previousListCount = this.collisionList.size;
 
-        let l1 = new Vector2(this.#position.x - .5, this.#position.y - .5 + this.#scale.y);
-        let r1 = new Vector2(this.#position.x + this.#scale.x- .5, this.#position.y - .5)
-        let l2 = new Vector2(collider.#position.x - .5, collider.#position.y - .5 + collider.scale.y);
-        let r2 = new Vector2(collider.#position.x + collider.#scale.x - .5, collider.#position.y - .5);
+        let l1 = new Vector2((this.#position.x - .5) - (this.#scale.x / 2), (this.#position.y - .5) + (this.#scale.y / 2));
+        let r1 = new Vector2((this.#position.x - .5) + (this.#scale.x / 2), (this.#position.y - .5) - (this.#scale.y / 2));
+        let l2 = new Vector2((collider.#position.x - .5) - (collider.#scale.x / 2), (collider.#position.y - .5) + (collider.#scale.y / 2));
+        let r2 = new Vector2((collider.#position.x - .5) + (collider.#scale.x / 2), (collider.#position.y - .5) - (collider.#scale.y / 2));
 
         // if rectangle has area 0, no overlap
-        if (l1.x == r1.x || l1.y == r1.y || r2.x == l2.x || l2.y == r2.y)
-            return false;
+        if (l1.x == r1.x || l1.y == r1.y || r2.x == l2.x || l2.y == r2.y) {
+            if (this.collisionList.has(collider.metaData)) {
+                this.collisionList.delete(collider.metaData, collider);
+            }
+            return;
+        }
 
         // If one rectangle is on left side of other
         if (l1.x > r2.x || l2.x > r1.x) {
-            return false;
+            if (this.collisionList.has(collider.metaData)) {
+                this.collisionList.delete(collider.metaData, collider);
+            }
+            return;
         }
 
         // If one rectangle is above other
         if (r1.y > l2.y || r2.y > l1.y) {
-            return false;
+            if (this.collisionList.has(collider.metaData)) {
+                this.collisionList.delete(collider.metaData, collider);
+            }
+            return;
         }
 
-        return true;
+        if (!this.collisionList.has(collider.metaData)) {
+            this.collisionList.set(collider.metaData, collider);
+        }
     }
 
     #onRender(x, y, scale) {
@@ -71,49 +93,18 @@ export class BoxCollider extends Component {
         Canvas.context.stroke();
         Canvas.context.lineWidth = 1;
     }
+
+    #createUUID() {
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        )
+    }
+
+    clone(collider) {
+        collider.position = new Vector2(this.#position.x, this.#position.y);
+        collider.scale = new Vector2(this.#scale.x, this.#scale.y);
+    }
 }
-// /* Driver program to test above function */
-
-// var l1 = new Point(), r1 = new Point(),
-//     l2 = new Point(), r2 = new Point();
-// l1.x = 3;
-// l1.y = 3;
-// r1.x = 4;
-// r1.y = 2;
-// l2.x = 3.5;
-// l2.y = 3.5;
-// r2.x = 8.5;
-// r2.y = 2.5;
-
-// if (doOverlap(l1, r1, l2, r2)) {
-//     console.log("Rectangles Overlap");
-// } else {
-//     console.log("Rectangles Don't Overlap");
-// }
-
-
-// // Returns true if two rectangles
-// // (l1, r1) and (l2, r2) overlap
-// function doOverlap(l1, r1, l2, r2) {
-
-//     // if rectangle has area 0, no overlap
-//     if (l1.x == r1.x || l1.y == r1.y || r2.x == l2.x || l2.y == r2.y)
-//         return false;
-
-//     // If one rectangle is on left side of other
-//     if (l1.x > r2.x || l2.x > r1.x) {
-//         return false;
-//     }
-
-//     // If one rectangle is above other
-//     if (r1.y > l2.y || r2.y > l1.y) {
-//         return false;
-//     }
-
-//     return true;
-// }
-
-
 
 // Circle collision Test
 // let n = 25;

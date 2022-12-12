@@ -2,6 +2,7 @@ import { Time } from "./time.js";
 import { SpriteRenderer } from "./sprite-renderer.js";
 import { BoxCollider } from "./box-collider.js";
 import { MonoBehaviour } from "./mono-behaviour.js";
+import { GameStateManager } from "../scripts/managers/game-state-manager.js";
 
 export class Canvas {
     static #canvas = null;
@@ -9,7 +10,10 @@ export class Canvas {
     static #ppu = 25;
     static #previousTimestamp = 0;
     static #gameObjectList = [];
+    static #colliderList = [];
+    static #play = false;
     static event = new Event('canvasUpdate');
+
     static get canvasWidth() {
         return Canvas.#canvas.width;
     }
@@ -45,6 +49,10 @@ export class Canvas {
     }
 
     static configureCanvas(canvasWidth, canvasHeight, ppu) {
+        GameStateManager.gameStateEvent.subscribe(isStarted => {
+            this.#play = true;
+        });
+
         this.#ppu = ppu;
         this.#canvas = document.createElement('canvas');
         this.#canvas.style = `border: 0px solid white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);`;
@@ -59,6 +67,10 @@ export class Canvas {
 
     static addGameObject(gameObject) {
         this.#gameObjectList.push(gameObject);
+    }
+
+    static addCollider(collider) {
+        this.#colliderList.push(collider);
     }
 
     static removeGameObject(gameObject) {
@@ -99,48 +111,75 @@ export class Canvas {
     }
 
     static #renderSprites(gameObjects) {
+
+        // Sort the items by layer value.
         gameObjects.sort((gameObjectA, gameObjectB) => {
             return gameObjectA.layer - gameObjectB.layer;
         });
 
+        // Render Sprites
         gameObjects.forEach((gameObject, index) => {
             let renderer = gameObject.getComponent(SpriteRenderer);
 
             if (renderer) {
                 renderer.sprite(renderer);
             }
-            
-            gameObject.getComponents(BoxCollider).forEach((collider) => {
-                collider.render();
-                gameObjects.forEach(gameObject2 => {
-                    gameObject2.getComponents(BoxCollider).forEach(collider2 =>{
-                        if(collider.test != collider2.test) {
-                            if (collider.checkForCollision(collider2)) {
-                                collider.gameObject.getComponents(MonoBehaviour).forEach(mono => {
-                                    mono.onTriggerEnter(collider2);
-                                })
-                                collider2.gameObject.getComponents(MonoBehaviour).forEach(mono => {
-                                    mono.onTriggerEnter(collider2);
-                                })
-
-                                gameObjects.forEach(asdf => {
-  
-                                    
-                                    if (asdf.children.find(c => c == collider.gameObject) != 'undefined' || asdf.children.find(c => c == collider2.gameObject) != 'undefined') {
-                                        
-                                        asdf.getComponents(MonoBehaviour).forEach(mono => {
-                                            
-                                            mono.onTriggerEnter(collider2);
-                                        })
-                                    }
-                                })
-                            } else {
-                            }
-                        }
-                    })
-                });
-                //collider.checkForCollisions()
-            });
         });
+
+        if (true) {
+            // Collision Check
+            this.#colliderList.forEach((collider, index) => {
+                collider.render();
+                let count = collider.collisionList.size;
+                for (let i = 0; i < this.#colliderList.length; i++) {
+                    if (collider != this.#colliderList[i]) {
+                        collider.checkForCollision(this.#colliderList[i]);
+                    }
+                }
+
+                if (count < collider.collisionList.size) {
+                    collider.gameObject.getComponents(MonoBehaviour).forEach(mono => {
+                        mono.onTriggerEnter(collider.collisionList);
+                    });
+                } else if(count > collider.collisionList.size) {
+                    collider.gameObject.getComponents(MonoBehaviour).forEach(mono => {
+                        mono.onTriggerExit(collider.collisionList);
+                    });
+                }
+            });
+        }
     }
 }
+
+
+            // gameObject.getComponents(BoxCollider).forEach((collider) => {
+            //     collider.render();
+            //     gameObjects.forEach(gameObject2 => {
+            //         gameObject2.getComponents(BoxCollider).forEach(collider2 => {
+            //             if (collider.test != collider2.test) {
+            //                 if (collider.checkForCollision(collider2)) {
+            //                     collider.gameObject.getComponents(MonoBehaviour).forEach(mono => {
+            //                         mono.onTriggerEnter(collider2);
+            //                     })
+            //                     collider2.gameObject.getComponents(MonoBehaviour).forEach(mono => {
+            //                         mono.onTriggerEnter(collider2);
+            //                     })
+
+            //                     gameObjects.forEach(asdf => {
+
+
+            //                         if (asdf.children.find(c => c == collider.gameObject) != 'undefined' || asdf.children.find(c => c == collider2.gameObject) != 'undefined') {
+
+            //                             asdf.getComponents(MonoBehaviour).forEach(mono => {
+
+            //                                 mono.onTriggerEnter(collider2);
+            //                             })
+            //                         }
+            //                     })
+            //                 } else {
+            //                 }
+            //             }
+            //         })
+            //     });
+            //     //collider.checkForCollisions()
+            // });
