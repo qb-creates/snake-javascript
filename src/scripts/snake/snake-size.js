@@ -1,5 +1,5 @@
 
-import { MonoBehaviour, Canvas, Time, Input, KeyCode } from "../../engine/qbcreates-js-engine.js";
+import { MonoBehaviour, Canvas, Time, Input, KeyCode, Object, Vector2 } from "../../engine/qbcreates-js-engine.js";
 import { snakeBodyColor } from "./snake-exports.js";
 
 export class SnakeSize extends MonoBehaviour {
@@ -27,9 +27,8 @@ export class SnakeSize extends MonoBehaviour {
 
     grow() {
         this.#isGrowing = true;
-        let tailCoordinates = this.gameObject.cells[0].position;
-        let cell = new Cell(tailCoordinates.x, tailCoordinates.y, snakeBodyColor);
-        this.gameObject.cells.unshift(cell);
+        let tailCoordinates = this.gameObject.children[0].transform.position;
+        Object.instantiate(this.gameObject.children[0], this.gameObject, new Vector2(tailCoordinates.x, tailCoordinates.y));
         this.#isGrowingTimer = .09;
     }
 }

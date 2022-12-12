@@ -25,7 +25,7 @@ export class SnakeMovement extends MonoBehaviour {
 
     awake() {
         //this.#snakeCollision = this.gameObject.getComponent(SnakeCollision.className);
-        //this.#snakeSize = this.gameObject.getComponent(SnakeSize.className);
+        this.#snakeSize = this.gameObject.getComponent(SnakeSize);
         GameStateManager.gameStateEvent.subscribe(isStarted => {
             this.#play = true;
         });
@@ -39,8 +39,8 @@ export class SnakeMovement extends MonoBehaviour {
         if (this.#play) {
             this.#movePlayerTimer += Time.fixedDeltaTime;
     
-            // if (this.#movePlayerTimer <= 0 && !this.#snakeSize.isGrowing) {
-            if (this.#movePlayerTimer >= .11) {
+            if (this.#movePlayerTimer >= .11 && !this.#snakeSize.isGrowing) {
+            // if (this.#movePlayerTimer >= .51) {
                 let headIndex = this.gameObject.children.length - 1
                 let coordinates = this.gameObject.children[headIndex].transform.position;
                 let headX = coordinates.x + this.#horizontalAxis;

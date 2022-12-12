@@ -25,7 +25,6 @@ export default class AppleBehaviour extends MonoBehaviour {
         let y = Math.floor(Math.random() * (h * (Math.round(Math.random()) > 0 ? 1 : -1)));
 
         this.transform.position = new Vector2(x, y);
-        this.gameObject.getComponent(SpriteRenderer).color = 'red';
     }
 
     start() {
@@ -37,7 +36,8 @@ export default class AppleBehaviour extends MonoBehaviour {
     onTriggerEnter(colliders) {
         colliders.forEach(collider => {
             if (collider.gameObject.objectName.includes('snake')) {
-                console.log('ate')
+                ScoreManager.addPoint();
+                collider.gameObject.parent.getComponent(SnakeSize).grow();
                 Object.instantiate(this.gameObject);
                 this.gameObject.destroy();
                 return;

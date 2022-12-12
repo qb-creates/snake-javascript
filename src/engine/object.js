@@ -36,7 +36,6 @@ export class Object {
         }
 
         Canvas.addGameObject(clonedObject);
-        originalGameObject.destroy();
         return clonedObject;
     }
 }

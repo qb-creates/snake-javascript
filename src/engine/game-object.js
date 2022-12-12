@@ -8,7 +8,7 @@ export class GameObject {
     #transform = null;
     #layer = 0;
     #isActive = true;
-
+    parent = null;
     get objectName() {
         return this.#objectName;
     }
@@ -37,6 +37,10 @@ export class GameObject {
         return this.#isDestroyed;
     }
 
+    set isDestroyed(value) {
+        this.#isDestroyed = value;
+    }
+
     get children() {
         return this.#children;
     }
@@ -52,8 +56,9 @@ export class GameObject {
     }
 
     addGameObject(gameObject) {
+        gameObject.parent = this;
         gameObject.transform.position = Vector2.add(gameObject.transform.position, this.transform.position);
-        this.#children.push(gameObject);
+        this.#children.unshift(gameObject);
     }
 
     getComponentInChildren() {
