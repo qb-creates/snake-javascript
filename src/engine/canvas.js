@@ -82,7 +82,7 @@ export class Canvas {
         });
 
         let index = this.#gameObjectList.indexOf(gameObject);
-        
+
         if (index >= 0) {
             this.#gameObjectList[index].children.forEach(child => {
                 child.destroy();
@@ -95,8 +95,16 @@ export class Canvas {
 
     static #updateCanvas = (timestamp) => {
         this.#context.clearRect(-this.#canvas.width / 2, -this.#canvas.height / 2, this.#canvas.width, this.#canvas.height);
-
-        if (false) {
+        this.#renderSprites(this.#gameObjectList);
+        this.#drawGrid();
+        // TODO set Time.delta dime equal to timestamp - previousTimestamp
+        // console.log(timestamp - this.#previousTimestamp);
+        this.#previousTimestamp = timestamp;
+        dispatchEvent(Canvas.event);
+        requestAnimationFrame(this.#updateCanvas);
+    }
+    static #drawGrid() {
+        if (document.getElementById("grid").checked) {
             for (let i = -20; i < 20; i++) {
                 for (let j = -20; j < 20; j++) {
                     this.#context.strokeStyle = '#80808011';
@@ -107,16 +115,7 @@ export class Canvas {
                 }
             }
         }
-
-        this.#renderSprites(this.#gameObjectList);
-        // TODO set Time.delta dime equal to timestamp - previousTimestamp
-        // console.log(timestamp - this.#previousTimestamp);
-        this.#previousTimestamp = timestamp;
-        dispatchEvent(Canvas.event);
-        requestAnimationFrame(this.#updateCanvas);
-
     }
-
     static #renderSprites(gameObjects) {
 
         // Sort the items by layer value.
@@ -133,60 +132,27 @@ export class Canvas {
             }
         });
 
-        if (true) {
-            // Collision Check
-            this.#colliderList.forEach((collider, index) => {
+        // Collision Check
+        this.#colliderList.forEach((collider, index) => {
+            if (document.getElementById("colliders").checked) {
                 collider.render();
-                let count = collider.collisionList.size;
-                for (let i = 0; i < this.#colliderList.length; i++) {
-                    if (collider != this.#colliderList[i]) {
-                        collider.checkForCollision(this.#colliderList[i]);
-                    }
+            }
+            let count = collider.collisionList.size;
+            for (let i = 0; i < this.#colliderList.length; i++) {
+                if (collider != this.#colliderList[i]) {
+                    collider.checkForCollision(this.#colliderList[i]);
                 }
+            }
 
-                if (count < collider.collisionList.size) {
-                    collider.gameObject.getComponents(MonoBehaviour).forEach(mono => {
-                        mono.onTriggerEnter(collider.collisionList);
-                    });
-                } else if(count > collider.collisionList.size) {
-                    collider.gameObject.getComponents(MonoBehaviour).forEach(mono => {
-                        mono.onTriggerExit(collider.collisionList);
-                    });
-                }
-            });
-        }
+            if (count < collider.collisionList.size) {
+                collider.gameObject.getComponents(MonoBehaviour).forEach(mono => {
+                    mono.onTriggerEnter(collider.collisionList);
+                });
+            } else if (count > collider.collisionList.size) {
+                collider.gameObject.getComponents(MonoBehaviour).forEach(mono => {
+                    mono.onTriggerExit(collider.collisionList);
+                });
+            }
+        });
     }
 }
-
-
-            // gameObject.getComponents(BoxCollider).forEach((collider) => {
-            //     collider.render();
-            //     gameObjects.forEach(gameObject2 => {
-            //         gameObject2.getComponents(BoxCollider).forEach(collider2 => {
-            //             if (collider.test != collider2.test) {
-            //                 if (collider.checkForCollision(collider2)) {
-            //                     collider.gameObject.getComponents(MonoBehaviour).forEach(mono => {
-            //                         mono.onTriggerEnter(collider2);
-            //                     })
-            //                     collider2.gameObject.getComponents(MonoBehaviour).forEach(mono => {
-            //                         mono.onTriggerEnter(collider2);
-            //                     })
-
-            //                     gameObjects.forEach(asdf => {
-
-
-            //                         if (asdf.children.find(c => c == collider.gameObject) != 'undefined' || asdf.children.find(c => c == collider2.gameObject) != 'undefined') {
-
-            //                             asdf.getComponents(MonoBehaviour).forEach(mono => {
-
-            //                                 mono.onTriggerEnter(collider2);
-            //                             })
-            //                         }
-            //                     })
-            //                 } else {
-            //                 }
-            //             }
-            //         })
-            //     });
-            //     //collider.checkForCollisions()
-            // });

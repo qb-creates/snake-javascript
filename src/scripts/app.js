@@ -6,7 +6,7 @@
 
 import { GameObject, Canvas, SpriteRenderer, Vector2, Input, Object, Component, BoxCollider } from "../engine/qbcreates-js-engine.js";
 import { GameStateManager } from "./managers/game-state-manager.js";
-import { SnakeMovement, SnakeInput, snakeHeadColor, snakeBodyColor, SnakeSize } from "./snake/snake-exports.js";
+import { SnakeMovement, SnakeInput, snakeHeadColor, snakeBodyColor, SnakeSize, SnakeCollision } from "./snake/snake-exports.js";
 import { square } from "../engine/sprite-renderer.js";
 import { TestFollow } from "./test-follow.js";
 import AppleBehaviour from "./apple/apple-behaviour.js";
@@ -21,8 +21,18 @@ collider.scale = Vector2.multiply(enemyObject.transform.scale, 3);
 enemyObject.getComponent(TestFollow).target = player;
 
 applePrefab();
-border();
+background();
+let border = verticalBorder();
+border.transform.position = new Vector2(-10, 0);
 
+border = verticalBorder();
+border.transform.position = new Vector2(10, 0);
+
+border = horizontalBorder();
+border.transform.position = new Vector2(0, 10);
+
+border = horizontalBorder();
+border.transform.position = new Vector2(0, -10);
 window.onPlay = () => {
   GameStateManager.onGameStart();
 }
@@ -63,6 +73,7 @@ function snakePrefab() {
   snakeGameObject.addComponent(SnakeMovement);
   snakeGameObject.addComponent(SnakeInput);
   snakeGameObject.addComponent(SnakeSize);
+
   Canvas.addGameObject(snakeTail);
   Canvas.addGameObject(snakeBody);
   Canvas.addGameObject(snakeHead);
@@ -81,18 +92,9 @@ function snakeBodyPrefab() {
   }
 
   snakeBody.addComponent(BoxCollider);
+  snakeBody.addComponent(SnakeCollision);
   return snakeBody;
 }
-// let a = {
-//   gameObject: new GameObject('apple'),
-//   scale: new Vector2(.4, .4),
-//   layer: 1,
-//   scipts: ,
-//   spriteColor: 'red',
-//   sprite: (renderer) => {
-//     square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'transparent', renderer.transform.scale)
-//   }
-// }
 
 function applePrefab() {
   let apple = new GameObject('apple');
@@ -126,8 +128,8 @@ function enemy(target) {
   return enemy;
 }
 
-function border() {
-  let border = new GameObject('gameBorder');
+function background() {
+  let border = new GameObject('background');
   border.transform.scale = new Vector2(19.5, 19.5);
   border.transform.position = new Vector2(0, 0);
   let spriteRenderer = border.addComponent(SpriteRenderer);
@@ -135,6 +137,40 @@ function border() {
   spriteRenderer.sprite = (renderer) => {
     square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'transparent', renderer.transform.scale)
   }
+  Canvas.addGameObject(border);
+  return border;
+}
+
+function verticalBorder() {
+  let border = new GameObject('border');
+  border.transform.scale = new Vector2(1, 20);
+  border.layer = 0;
+
+  let spriteRenderer = border.addComponent(SpriteRenderer);
+  spriteRenderer.color = 'white';
+  spriteRenderer.sprite = (renderer) => {
+    square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'transparent', renderer.transform.scale)
+  }
+
+  let collider = border.addComponent(BoxCollider);
+  collider.scale = new Vector2(.8, 19)
+  Canvas.addGameObject(border);
+  return border;
+}
+
+function horizontalBorder() {
+  let border = new GameObject('border');
+  border.transform.scale = new Vector2(20, 1);
+  border.layer = 0;
+
+  let spriteRenderer = border.addComponent(SpriteRenderer);
+  spriteRenderer.color = 'white';
+  spriteRenderer.sprite = (renderer) => {
+    square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'transparent', renderer.transform.scale)
+  }
+
+  let collider = border.addComponent(BoxCollider);
+  collider.scale = new Vector2(19, .8)
   Canvas.addGameObject(border);
   return border;
 }

@@ -12,6 +12,7 @@ export class GameStateManager {
     }
 
     static onGameOver() {
+        console.log('gameover')
         this.#isStarted = false;
         this.#gameStateEvent.next(this.#isStarted);
     }

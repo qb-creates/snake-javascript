@@ -27,7 +27,7 @@ export class SnakeMovement extends MonoBehaviour {
         //this.#snakeCollision = this.gameObject.getComponent(SnakeCollision.className);
         this.#snakeSize = this.gameObject.getComponent(SnakeSize);
         GameStateManager.gameStateEvent.subscribe(isStarted => {
-            this.#play = true;
+            this.#play = isStarted;
         });
     }
 
