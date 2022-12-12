@@ -69,7 +69,7 @@ function snakePrefab() {
 function snakeBodyPrefab() {
   let snakeBody = new GameObject('snakeBody');
   snakeBody.transform.position = new Vector2(1, 1);
-  
+
   let spriteRenderer = snakeBody.addComponent(SpriteRenderer);
   spriteRenderer.color = snakeBodyColor;
   spriteRenderer.sprite = (renderer) => {
@@ -79,6 +79,16 @@ function snakeBodyPrefab() {
   snakeBody.addComponent(BoxCollider);
   return snakeBody;
 }
+// let a = {
+//   gameObject: new GameObject('apple'),
+//   scale: new Vector2(.4, .4),
+//   layer: 1,
+//   scipts: ,
+//   spriteColor: 'red',
+//   sprite: (renderer) => {
+//     square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'transparent', renderer.transform.scale)
+//   }
+// }
 
 function applePrefab() {
   let apple = new GameObject('apple');
@@ -86,11 +96,11 @@ function applePrefab() {
   apple.layer = 1;
 
   let spriteRenderer = apple.addComponent(SpriteRenderer);
-  spriteRenderer.color = 'red';
+  spriteRenderer.color = 'transparent';
   spriteRenderer.sprite = (renderer) => {
     square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'transparent', renderer.transform.scale)
   }
-
+  apple.addComponent(BoxCollider);
   apple.addComponent(AppleBehaviour);
   return apple;
 }

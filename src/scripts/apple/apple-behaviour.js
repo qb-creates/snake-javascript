@@ -1,5 +1,5 @@
 
-import { MonoBehaviour, Canvas, Input, KeyCode, Vector2, BoxCollider, SpriteRenderer } from "../../engine/qbcreates-js-engine.js";
+import { MonoBehaviour, Canvas, Input, KeyCode, Vector2, BoxCollider, SpriteRenderer, Object } from "../../engine/qbcreates-js-engine.js";
 import { ScoreManager } from "../managers/score-manager.js";
 import { SnakeSize } from "../snake/snake-exports.js";
 
@@ -19,29 +19,29 @@ export default class AppleBehaviour extends MonoBehaviour {
         //         return;
         //     }
         // }
-        this.gameObject.getComponent(SpriteRenderer).color = 'transparent';
-        let x = Math.floor(Math.random() * (Canvas.canvasWidth / (Canvas.ppu * 2)));
-        let y = Math.floor(Math.random() * (Canvas.canvasHeight / (Canvas.ppu * 2)));
+        let w = (Canvas.canvasWidth / (Canvas.ppu * 2) - 1);
+        let h = (Canvas.canvasHeight / (Canvas.ppu * 2) - 1);
+        let x = Math.floor(Math.random() * (w * (Math.round(Math.random()) > 0 ? 1 : -1)));
+        let y = Math.floor(Math.random() * (h * (Math.round(Math.random()) > 0 ? 1 : -1)));
+
         this.transform.position = new Vector2(x, y);
+        this.gameObject.getComponent(SpriteRenderer).color = 'red';
     }
 
     start() {
     }
 
     update() {
-        // let cellCoordinates = this.gameObject.cells[0].position;
-        // let collisionList = Canvas.checkForCollisions({ x: cellCoordinates.x, y: cellCoordinates.y });
-        // let snakeGameObject = collisionList.find(object => object instanceof (SnakeGameObject));
+    }
 
-        // if (snakeGameObject != null) {
-        //     this.gameObject.destroy();
-
-        //     let snakeSize = snakeGameObject.getComponent(SnakeSize.className);
-        //     snakeSize.grow();
-
-        //     let appleGameObject = new AppleGameObject();
-        //     //Canvas.addGameObject(appleGameObject);
-        //     ScoreManager.addPoint();
-        // }
+    onTriggerEnter(colliders) {
+        colliders.forEach(collider => {
+            if (collider.gameObject.objectName.includes('snake')) {
+                console.log('ate')
+                Object.instantiate(this.gameObject);
+                this.gameObject.destroy();
+                return;
+            }
+        })
     }
 }

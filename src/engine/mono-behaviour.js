@@ -11,15 +11,17 @@ export class MonoBehaviour extends Component {
             this.start();
             
             setInterval(() => {
-                this.fixedUpdate();
+                if (this.gameObject.isActive) {
+                    this.fixedUpdate();
+                }
             }, Time.fixedDeltaTime * 1000);
 
             addEventListener('canvasUpdate', () => {
-                if (!this.gameObject.isDestroyed){
+                if (!this.gameObject.isDestroyed ){
                     this.update();
                 }
             });
-        }, 100);
+        });
     }
 
     awake() {
@@ -35,11 +37,9 @@ export class MonoBehaviour extends Component {
     }
 
     onTriggerEnter() {
-
     }
     
     onTriggerExit() {
-        
     }
 
     clone() {

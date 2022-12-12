@@ -74,8 +74,15 @@ export class Canvas {
     }
 
     static removeGameObject(gameObject) {
-        let index = this.#gameObjectList.indexOf(gameObject);
+        gameObject.getComponents(BoxCollider).forEach(collider => {
+            if (this.#colliderList.includes(collider)) {
+                let i = this.#colliderList.indexOf(collider);
+                this.#colliderList.splice(i, 1);
+            }
+        });
 
+        let index = this.#gameObjectList.indexOf(gameObject);
+        
         if (index >= 0) {
             this.#gameObjectList[index].children.forEach(child => {
                 child.destroy();

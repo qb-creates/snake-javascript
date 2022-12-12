@@ -7,6 +7,7 @@ export class GameObject {
     #isDestroyed = false;
     #transform = null;
     #layer = 0;
+    #isActive = true;
 
     get objectName() {
         return this.#objectName;
@@ -23,7 +24,15 @@ export class GameObject {
     set layer(value) {
         this.#layer = value;
     }
-    
+
+    get isActive() {
+        return this.#isActive;
+    }
+
+    set isActive(value) {
+        this.#isActive = value;
+    }
+
     get isDestroyed() {
         return this.#isDestroyed;
     }
@@ -35,7 +44,7 @@ export class GameObject {
     get transform() {
         return this.#transform;
     }
-    
+
     constructor(objectName) {
         this.#objectName = objectName;
         this.#transform = new Transform(this)

@@ -40,7 +40,7 @@ export class TestFollow extends MonoBehaviour{
     }
 
     onTriggerEnter(colliders) {
-       
+
     }
 
     onTriggerExit(colliders) {

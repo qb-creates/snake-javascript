@@ -1,4 +1,4 @@
-import { GameObject, Vector2, Component, Transform, Canvas } from "./qbcreates-js-engine.js";
+import { GameObject, Vector2, Component, Transform, Canvas, BoxCollider } from "./qbcreates-js-engine.js";
 
 export class Object {
     /**
@@ -23,17 +23,18 @@ export class Object {
             }
         });
 
-        if (typeof(parent) != 'undefined') {
+        if (typeof (parent) != 'undefined') {
             if (parent instanceof GameObject) {
                 parent.addGameObject(clonedObject);
             } else {
-                throw new Error(`Error instantiating ${typeof(originalGameObject.objectName)}. ${parent} is not of type gameObject.`)
+                throw new Error(`Error instantiating ${typeof (originalGameObject.objectName)}. ${parent} is not of type gameObject.`)
             }
         }
 
         if (typeof (position) != 'undefined') {
             clonedObject.transform.position = position;
         }
+
         Canvas.addGameObject(clonedObject);
         originalGameObject.destroy();
         return clonedObject;
