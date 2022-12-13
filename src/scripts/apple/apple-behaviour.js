@@ -39,7 +39,7 @@ export default class AppleBehaviour extends MonoBehaviour {
                 ScoreManager.addPoint();
                 collider.gameObject.parent.getComponent(SnakeSize).grow();
                 Object.instantiate(this.gameObject);
-                this.gameObject.destroy();
+                Object.destroy(this.gameObject);
                 return;
             }
         })

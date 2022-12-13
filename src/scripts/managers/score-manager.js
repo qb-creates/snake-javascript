@@ -3,7 +3,7 @@ export class ScoreManager {
 
     static addPoint() {
         this.#score++;
-        let asdf = document.getElementById('score');
-        asdf.innerHTML = this.#score;
+        let scoreLabel = document.getElementById('score');
+        scoreLabel.innerHTML = this.#score;
     }
 }

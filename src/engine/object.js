@@ -1,4 +1,4 @@
-import { GameObject, Vector2, Component, Transform, Canvas, BoxCollider } from "./qbcreates-js-engine.js";
+import { GameObject, Vector2, Component, Transform, Canvas, MonoBehaviour } from "./qbcreates-js-engine.js";
 
 export class Object {
     /**
@@ -37,5 +37,19 @@ export class Object {
 
         Canvas.addGameObject(clonedObject);
         return clonedObject;
+    }
+
+    /**
+     * 
+     * @param {GameObject | Component} object 
+     */
+    static destroy(object) {
+        object.getComponents(MonoBehaviour).forEach(component => {
+            component.destroy();
+        });
+        object.getComponents(Component).forEach(component => {
+            component = null;
+        });
+        Canvas.removeGameObject(object);
     }
 }

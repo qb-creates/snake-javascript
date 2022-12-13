@@ -73,9 +73,4 @@ export class SnakeMovement extends MonoBehaviour {
             }
         }
     }
-    onTriggerEnter(collider) {
-        if (collider.gameObject.objectName.includes('enemy')) {
-            console.log('enemy hit');
-        }
-    }
 }

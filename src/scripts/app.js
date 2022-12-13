@@ -14,13 +14,17 @@ import AppleBehaviour from "./apple/apple-behaviour.js";
 Input.initialize();
 Canvas.configureCanvas(500, 500, 25);
 let player = snakePrefab();
-
+setTimeout(()=>{
+ 
+  Object.destroy(player);
+  player = null;
+},3000)
 let enemyObject = enemy();
 let collider = enemyObject.addComponent(BoxCollider);
 collider.scale = Vector2.multiply(enemyObject.transform.scale, 3);
 enemyObject.getComponent(TestFollow).target = player;
 
-applePrefab();
+// applePrefab();
 background();
 let border = verticalBorder();
 border.transform.position = new Vector2(-10, 0);

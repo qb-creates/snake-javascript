@@ -1,7 +1,10 @@
 import { Time } from "./time.js";
 import { Component } from "./component.js";
+import { Canvas } from "./canvas.js";
 
 export class MonoBehaviour extends Component {
+    #fixedUpdateInterval = null;
+    #canvasUpdateSubscription = null;
 
     constructor(gameObject) {
         super(gameObject);
@@ -9,21 +12,25 @@ export class MonoBehaviour extends Component {
         setTimeout(() => {
             this.awake();
             this.start();
-            
-            setInterval(() => {
+
+            this.#fixedUpdateInterval = setInterval(() => {
                 if (this.gameObject.isActive) {
                     this.fixedUpdate();
                 }
             }, Time.fixedDeltaTime * 1000);
 
-            addEventListener('canvasUpdate', () => {
-                if (!this.gameObject.isDestroyed ){
+
+            this.#canvasUpdateSubscription = Canvas.canvasUpdate.subscribe(isStarted => {
+                if (!this.gameObject.isDestroyed) {
                     this.update();
                 }
             });
         });
     }
-
+    destroy() {
+        this.#canvasUpdateSubscription.unsubscribe();
+        clearInterval(this.#fixedUpdateInterval);
+    }
     awake() {
     }
 
@@ -38,7 +45,7 @@ export class MonoBehaviour extends Component {
 
     onTriggerEnter() {
     }
-    
+
     onTriggerExit() {
     }
 

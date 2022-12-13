@@ -95,12 +95,4 @@ export class GameObject {
         }
         return component
     }
-
-    destroy() {
-        this.#isDestroyed = true;
-        this.#scriptList.forEach(component => {
-            component = null;
-        });
-        Canvas.removeGameObject(this);
-    }
 } 

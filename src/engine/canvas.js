@@ -3,6 +3,8 @@ import { SpriteRenderer } from "./sprite-renderer.js";
 import { BoxCollider } from "./box-collider.js";
 import { MonoBehaviour } from "./mono-behaviour.js";
 import { GameStateManager } from "../scripts/managers/game-state-manager.js";
+import { Object } from "./object.js";
+import { Component } from "./component.js";
 
 export class Canvas {
     static #canvas = null;
@@ -12,6 +14,7 @@ export class Canvas {
     static #gameObjectList = [];
     static #colliderList = [];
     static #play = false;
+    static canvasUpdate = new rxjs.Subject();
     static event = new Event('canvasUpdate');
 
     static get canvasWidth() {
@@ -75,21 +78,22 @@ export class Canvas {
 
     static removeGameObject(gameObject) {
         gameObject.getComponents(BoxCollider).forEach(collider => {
-            if (this.#colliderList.includes(collider)) {
-                let i = this.#colliderList.indexOf(collider);
-                this.#colliderList.splice(i, 1);
-            }
+            let i = this.#colliderList.indexOf(collider);
+
+                if (i >= 0) {
+                    this.#colliderList.splice(i, 1);
+                }
         });
 
         let index = this.#gameObjectList.indexOf(gameObject);
 
         if (index >= 0) {
-            this.#gameObjectList[index].children.forEach(child => {
-                child.destroy();
+            let a = this.#gameObjectList.splice(index, 1);
+
+            a[0].children.forEach(child => {
+                Object.destroy(child);
             });
 
-            this.#gameObjectList[index] = null;
-            this.#gameObjectList.splice(index, 1);
         }
     }
 
@@ -100,7 +104,7 @@ export class Canvas {
         // TODO set Time.delta dime equal to timestamp - previousTimestamp
         // console.log(timestamp - this.#previousTimestamp);
         this.#previousTimestamp = timestamp;
-        dispatchEvent(Canvas.event);
+        this.canvasUpdate.next();
         requestAnimationFrame(this.#updateCanvas);
     }
     static #drawGrid() {
