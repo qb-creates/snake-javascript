@@ -36,6 +36,7 @@ export class SnakeMovement extends MonoBehaviour {
     }
 
     update() {
+        console.log(this.gameObject.objectName);
         if (this.#play) {
             this.#movePlayerTimer += Time.fixedDeltaTime;
     

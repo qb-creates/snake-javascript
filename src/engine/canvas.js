@@ -80,9 +80,9 @@ export class Canvas {
         gameObject.getComponents(BoxCollider).forEach(collider => {
             let i = this.#colliderList.indexOf(collider);
 
-                if (i >= 0) {
-                    this.#colliderList.splice(i, 1);
-                }
+            if (i >= 0) {
+                this.#colliderList.splice(i, 1);
+            }
         });
 
         let index = this.#gameObjectList.indexOf(gameObject);
@@ -93,8 +93,9 @@ export class Canvas {
             a[0].children.forEach(child => {
                 Object.destroy(child);
             });
-
+            a = null;
         }
+        console.log(gameObject)
     }
 
     static #updateCanvas = (timestamp) => {

@@ -44,7 +44,9 @@ export class GameObject {
     get children() {
         return this.#children;
     }
-
+    set children(value) {
+        this.#children = value;
+    }
     get transform() {
         return this.#transform;
     }
