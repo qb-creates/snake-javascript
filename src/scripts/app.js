@@ -14,16 +14,27 @@ import AppleBehaviour from "./apple/apple-behaviour.js";
 Input.initialize();
 Canvas.configureCanvas(500, 500, 25);
 let player = snakePrefab();
-setTimeout(()=>{
- 
-  Object.destroy(player);
-  // player.children = [null];
-},1000)
 let enemyObject = enemy();
 let collider = enemyObject.addComponent(BoxCollider);
 collider.scale = Vector2.multiply(enemyObject.transform.scale, 3);
 enemyObject.getComponent(TestFollow).target = player;
 
+let enemy2 = enemy();
+enemy2.transform.position = new Vector2(-5, -5);
+enemy2.objectName = 'new enemy'
+collider = enemy2.addComponent(BoxCollider);
+collider.scale = Vector2.multiply(enemyObject.transform.scale, 3);
+enemy2.getComponent(TestFollow).target = player;
+
+// setTimeout(()=>{
+
+//   Object.destroy(player);
+//   // player.children = [null];
+//   setTimeout(() => {
+//     player = snakePrefab();
+//     enemyObject.getComponent(TestFollow).target = player;
+//   },4000);
+// },20000)
 applePrefab();
 background();
 let border = verticalBorder();
@@ -37,6 +48,7 @@ border.transform.position = new Vector2(0, 10);
 
 border = horizontalBorder();
 border.transform.position = new Vector2(0, -10);
+
 window.onPlay = () => {
   GameStateManager.onGameStart();
 }
@@ -100,6 +112,33 @@ function snakeBodyPrefab() {
   return snakeBody;
 }
 
+class Game {
+  static #instance = null;
+
+  constructor() {
+    if (Game.instance) {
+      return Game.instance;
+    }
+    Game.instance = this;
+  }
+
+  applePrefab() {
+    let apple = new GameObject('apple');
+    apple.transform.position = new Vector2(5, 5);
+    apple.transform.scale = new Vector2(.4, .4);
+    apple.layer = 1;
+
+    let spriteRenderer = apple.addComponent(SpriteRenderer);
+    spriteRenderer.color = 'red';
+    spriteRenderer.sprite = (renderer) => {
+      square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'transparent', renderer.transform.scale)
+    }
+    apple.addComponent(BoxCollider);
+    apple.addComponent(AppleBehaviour);
+    Canvas.addGameObject(apple);
+    return apple;
+  }
+}
 function applePrefab() {
   let apple = new GameObject('apple');
   apple.transform.position = new Vector2(5, 5);
@@ -178,3 +217,4 @@ function horizontalBorder() {
   Canvas.addGameObject(border);
   return border;
 }
+let sa = new Game();

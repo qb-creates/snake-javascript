@@ -78,10 +78,10 @@ export class Canvas {
 
     static removeGameObject(gameObject) {
         gameObject.getComponents(BoxCollider).forEach(collider => {
-            let i = this.#colliderList.indexOf(collider);
+            let index = this.#colliderList.indexOf(collider);
 
-            if (i >= 0) {
-                this.#colliderList.splice(i, 1);
+            if (index >= 0) {
+                this.#colliderList.splice(index, 1);
             }
         });
 
@@ -95,7 +95,6 @@ export class Canvas {
             });
             a = null;
         }
-        console.log(gameObject)
     }
 
     static #updateCanvas = (timestamp) => {

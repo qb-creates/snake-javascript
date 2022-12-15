@@ -3,16 +3,9 @@ import { MonoBehaviour, Canvas, Time, Input, KeyCode, Vector2, SpriteRenderer } 
 import { GameStateManager } from "./managers/game-state-manager.js";
 import { square } from "../engine/sprite-renderer.js";
 export class TestFollow extends MonoBehaviour {
-    #target = null;
+    target = null;
     speed = 1;
     #play = false;
-    get target() {
-        return this.#target;
-    }
-
-    set target(value) {
-        this.#target = value;
-    }
 
     awake() {
         GameStateManager.gameStateEvent.subscribe(isStarted => {
@@ -41,6 +34,8 @@ export class TestFollow extends MonoBehaviour {
     animation = [];
     animationcount = 0;
     update() {
+
+
         if (this.animationcount == 0) {
             this.gameObject.getComponent(SpriteRenderer).sprite = this.animation[0];
         }
@@ -57,11 +52,11 @@ export class TestFollow extends MonoBehaviour {
             this.gameObject.getComponent(SpriteRenderer).sprite = this.animation[4];
             this.animationcount = 0;
         }
-        if (true) {
 
-
+        // console.log(`${this.gameObject.objectName}     ${this.target}`);
+        if (this.target) {
             let step = this.speed * Time.deltaTime;
-            let myTarg = this.#target.children[this.#target.children.length - 1];
+            let myTarg = this.target.children[this.target.children.length - 1];
             let placeholder = Vector2.subtract(myTarg.transform.position, this.transform.position).normalize();
             let xDistance = Math.abs(this.transform.position.x - myTarg.transform.position.x);
             let yDistance = Math.abs(this.transform.position.y - myTarg.transform.position.y);

@@ -12,6 +12,7 @@ export class Object {
         clonedObject.layer = originalGameObject.layer;
         clonedObject.transform.position = new Vector2(originalGameObject.transform.position.x, originalGameObject.transform.position.y);
         clonedObject.transform.scale = new Vector2(originalGameObject.transform.scale.x, originalGameObject.transform.scale.y);
+        
         originalGameObject.children.forEach(child => {
             Object.instantiate(child, clonedObject);
         });
@@ -44,12 +45,10 @@ export class Object {
      * @param {GameObject | Component} object 
      */
     static destroy(object) {
+        Canvas.removeGameObject(object);
         object.getComponents(MonoBehaviour).forEach(component => {
             component.destroy();
         });
-        object.getComponents(Component).forEach(component => {
-            component = null;
-        });
-        Canvas.removeGameObject(object);
+        object.destroy();
     }
 }

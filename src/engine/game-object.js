@@ -56,6 +56,10 @@ export class GameObject {
         this.#transform = new Transform(this)
         this.#scriptList.push(this.#transform);
     }
+    destroy() {
+        // this.#scriptList = null;
+        this.#isDestroyed = true;
+    }
 
     addGameObject(gameObject) {
         gameObject.parent = this;
@@ -68,11 +72,17 @@ export class GameObject {
     }
 
     getComponent(componentClass) {
-        return this.#scriptList.find(component => component instanceof componentClass);
+        if (this.#scriptList) {
+            return this.#scriptList.find(component => component instanceof componentClass);
+        }
+        return null;
     }
 
     getComponents(componentClass) {
-        return this.#scriptList.filter(component => component instanceof componentClass);
+        if (this.#scriptList) {
+            return this.#scriptList.filter(component => component instanceof componentClass);
+        }
+        return null;
     }
 
     /**
