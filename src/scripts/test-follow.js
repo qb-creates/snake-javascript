@@ -37,22 +37,31 @@ export class TestFollow extends MonoBehaviour {
 
 
         if (this.animationcount == 0) {
-            this.gameObject.getComponent(SpriteRenderer).sprite = this.animation[0];
+            this.gameObject.transform.scale = new Vector2(.8, .8);
         }
         if (this.animationcount == 5) {
-            this.gameObject.getComponent(SpriteRenderer).sprite = this.animation[1];
+            this.gameObject.transform.scale = new Vector2(.6, .6);
         }
         if (this.animationcount == 10) {
-            this.gameObject.getComponent(SpriteRenderer).sprite = this.animation[2];
+            this.gameObject.transform.scale = new Vector2(.4, .4);
         }
         if (this.animationcount == 15) {
-            this.gameObject.getComponent(SpriteRenderer).sprite = this.animation[3];
+            this.gameObject.transform.scale = new Vector2(.3, .3);
         }
         if (this.animationcount == 20) {
-            this.gameObject.getComponent(SpriteRenderer).sprite = this.animation[4];
+            this.gameObject.transform.scale = new Vector2(.3, .3);
+        }
+        if (this.animationcount == 30) {
+            this.gameObject.transform.scale = new Vector2(.4, .4);
+        }
+        if (this.animationcount == 40) {
+            this.gameObject.transform.scale = new Vector2(.6, .6);
+        }
+        if (this.animationcount == 50) {
+            this.gameObject.transform.scale = new Vector2(.8, .8);
             this.animationcount = 0;
         }
-
+        
         // console.log(`${this.gameObject.objectName}     ${this.target}`);
         if (this.target) {
             let step = this.speed * Time.deltaTime;

@@ -1,29 +1,12 @@
 import { Component, Vector2, Canvas } from "./qbcreates-js-engine.js";
 
 export class BoxCollider extends Component {
-    #position = new Vector2(0, 0);
-    #scale = new Vector2(1, 1);
-    #render = null;
     collisionList = new Map();
+    position = new Vector2(0, 0);
+    scale = new Vector2(1, 1);
+    #render = null;
     #metaData = '';
-    previousListCount = 0;
-
-    test = 0;
-    get position() {
-        return this.#position;
-    }
-
-    set position(value) {
-        this.#position = value;
-    }
-
-    get scale() {
-        return this.#scale;
-    }
-
-    set scale(value) {
-        this.#scale = value;
-    }
+    #previousListCount = 0;
 
     get render() {
         return this.#render;
@@ -35,21 +18,22 @@ export class BoxCollider extends Component {
 
     constructor(gameObject) {
         super(gameObject)
-        this.#position = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
-        this.#scale = new Vector2(gameObject.transform.scale.x, gameObject.transform.scale.y)
+        this.position = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y);
+        this.scale = new Vector2(gameObject.transform.scale.x, gameObject.transform.scale.y)
         this.#render = () => {
-            this.#onRender(this.#position.x, this.#position.y, this.#scale)
+            this.#onRender(this.position.x, this.position.y, this.scale)
         };
         this.#metaData = this.#createUUID();
     }
 
     checkForCollision(collider) {
-        this.previousListCount = this.collisionList.size;
+        // Saves the current 
+        this.#previousListCount = this.collisionList.size;
 
-        let l1 = new Vector2((this.#position.x - .5) - (this.#scale.x / 2), (this.#position.y - .5) + (this.#scale.y / 2));
-        let r1 = new Vector2((this.#position.x - .5) + (this.#scale.x / 2), (this.#position.y - .5) - (this.#scale.y / 2));
-        let l2 = new Vector2((collider.#position.x - .5) - (collider.#scale.x / 2), (collider.#position.y - .5) + (collider.#scale.y / 2));
-        let r2 = new Vector2((collider.#position.x - .5) + (collider.#scale.x / 2), (collider.#position.y - .5) - (collider.#scale.y / 2));
+        let l1 = new Vector2((this.position.x - .5) - (this.scale.x / 2), (this.position.y - .5) + (this.scale.y / 2));
+        let r1 = new Vector2((this.position.x - .5) + (this.scale.x / 2), (this.position.y - .5) - (this.scale.y / 2));
+        let l2 = new Vector2((collider.position.x - .5) - (collider.scale.x / 2), (collider.position.y - .5) + (collider.scale.y / 2));
+        let r2 = new Vector2((collider.position.x - .5) + (collider.scale.x / 2), (collider.position.y - .5) - (collider.scale.y / 2));
 
         // if rectangle has area 0, no overlap
         if (l1.x == r1.x || l1.y == r1.y || r2.x == l2.x || l2.y == r2.y) {
@@ -79,6 +63,17 @@ export class BoxCollider extends Component {
             this.collisionList.set(collider.metaData, collider);
         }
     }
+    
+    /**
+     * 
+     * @param {BoxCollider} collider 
+     */
+    clone(collider) {
+        if (collider instanceof BoxCollider) {
+            collider.position = new Vector2(this.position.x, this.position.y);
+            collider.scale = new Vector2(this.scale.x, this.scale.y);
+        }
+    }
 
     #onRender(x, y, scale) {
         let w = Canvas.ppu * scale.x;
@@ -98,11 +93,6 @@ export class BoxCollider extends Component {
         return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
         )
-    }
-
-    clone(collider) {
-        collider.position = new Vector2(this.#position.x, this.#position.y);
-        collider.scale = new Vector2(this.#scale.x, this.#scale.y);
     }
 }
 

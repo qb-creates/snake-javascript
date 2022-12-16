@@ -3,7 +3,7 @@ import { MonoBehaviour, Canvas, Input, KeyCode, Vector2, BoxCollider, SpriteRend
 import { ScoreManager } from "../managers/score-manager.js";
 import { SnakeSize } from "../snake/snake-exports.js";
 
-export default class AppleBehaviour extends MonoBehaviour {
+export class AppleBehaviour extends MonoBehaviour {
 
     awake() {
         // while (true) {

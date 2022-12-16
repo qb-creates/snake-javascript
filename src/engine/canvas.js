@@ -3,7 +3,7 @@ import { SpriteRenderer } from "./sprite-renderer.js";
 import { BoxCollider } from "./box-collider.js";
 import { MonoBehaviour } from "./mono-behaviour.js";
 import { GameStateManager } from "../scripts/managers/game-state-manager.js";
-import { Object } from "./object.js";
+import { Objects } from "./object.js";
 import { Component } from "./component.js";
 
 export class Canvas {
@@ -91,7 +91,7 @@ export class Canvas {
             let a = this.#gameObjectList.splice(index, 1);
 
             a[0].children.forEach(child => {
-                Object.destroy(child);
+                Objects.destroy(child);
             });
             a = null;
         }

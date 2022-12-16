@@ -12,13 +12,14 @@ export class SnakeCollision extends MonoBehaviour {
 
     start() {
     }
-    7
+    
     update() {
     }
 
 
     onTriggerEnter(colliders) {
         colliders.forEach(collider => {
+            console.log(collider.gameObject.objectName);
             if (collider.gameObject.objectName.includes('snake')) {
                 if (this.gameObject.parent.children[this.gameObject.parent.children.length - 1] == this.gameObject) {
                     GameStateManager.onGameOver();

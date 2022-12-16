@@ -3,33 +3,16 @@ import { Component } from "./component.js";
 import { Vector2 } from "./vector2.js";
 
 export class SpriteRenderer extends Component {
-    #sprite = () => { };
-    #color = 'blue';
-
-    get sprite() {
-        return this.#sprite;
-    }
-
-    set sprite(value) {
-        value(this);
-        this.#sprite = value;
-    }
-
-    get color() {
-        return this.#color;
-    }
-
-    set color(value) {
-        this.#color = value
-    }
+    sprite = () => { };
+    color = 'blue';
 
     constructor(gameObject) {
         super(gameObject);
     }
 
     clone(renderer) {
-        renderer.sprite = this.#sprite;
-        renderer.color = this.#color;
+        renderer.sprite = this.sprite;
+        renderer.color = this.color;
     }
 }
 
