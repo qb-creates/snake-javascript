@@ -1,7 +1,4 @@
-import { Time } from "./time.js";
-import { Component } from "./component.js";
-import { Canvas } from "./canvas.js";
-import { GameObject } from "./game-object.js";
+import { Time, Component, Canvas, GameObject } from "./qbcreates-js-engine.js";
 
 export class MonoBehaviour extends Component {
     #fixedUpdateInterval = null;

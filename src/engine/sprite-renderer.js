@@ -1,6 +1,4 @@
-import { Canvas } from "./canvas.js"
-import { Component } from "./component.js";
-import { Vector2 } from "./vector2.js";
+import { Vector2, Component, Canvas } from "./qbcreates-js-engine.js";
 
 export class SpriteRenderer extends Component {
     sprite = () => { };

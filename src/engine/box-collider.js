@@ -1,19 +1,14 @@
-import { Component, Vector2, Canvas } from "./qbcreates-js-engine.js";
+import { Canvas, Component, Vector2 } from "./qbcreates-js-engine.js";
 
 export class BoxCollider extends Component {
     position = new Vector2(0, 0);
     scale = new Vector2(1, 1);
     #render = null;
-    #metaData = '';
     #collisionList = new Map();
     #previousListCount = 0;
 
     get render() {
         return this.#render;
-    }
-
-    get metaData() {
-        return this.#metaData;
     }
 
     get collisionList() {
@@ -27,7 +22,6 @@ export class BoxCollider extends Component {
         this.#render = () => {
             this.#onRender(this.position.x, this.position.y, this.scale)
         };
-        this.#metaData = this.#createUUID();
     }
 
     checkForCollision(collider) {
@@ -82,12 +76,6 @@ export class BoxCollider extends Component {
         Canvas.context.roundRect(x - (Canvas.ppu / 2), y - (Canvas.ppu / 2), w, h);
         Canvas.context.stroke();
         Canvas.context.lineWidth = 1;
-    }
-
-    #createUUID() {
-        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-        )
     }
 }
 

@@ -1,11 +1,22 @@
-import { GameObject } from "./game-object.js";
-import { Vector2 } from "./vector2.js";
-import { Component } from "./component.js";
-import { Transform } from "./transform.js";
-import { Canvas } from "./canvas.js";
-import { MonoBehaviour } from "./mono-behaviour.js";
+import { GameObject, Vector2, Component, Transform, Canvas, MonoBehaviour } from "./qbcreates-js-engine.js";
 
 export class QObject {
+    #metaData = '';
+    
+    get metaData() {
+        return this.#metaData;
+    }
+
+    constructor() {
+        this.#metaData = this.#createUUID();
+    }
+
+    #createUUID() {
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        )
+    }
+
     /**
      * Clones the original gameObject and returns the clone
      * @param {GameObject} originalGameObject - GameObject that will be cloned.

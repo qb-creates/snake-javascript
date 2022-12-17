@@ -1,4 +1,4 @@
-import { BoxCollider, Component, Vector2 } from "./qbcreates-js-engine.js";
+import { Vector2, Component, BoxCollider } from "./qbcreates-js-engine.js";
 
 export class Transform extends Component{
     #position = new Vector2(0, 0);

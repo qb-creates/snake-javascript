@@ -1,10 +1,4 @@
-import { Time } from "./time.js";
-import { SpriteRenderer } from "./sprite-renderer.js";
-import { BoxCollider } from "./box-collider.js";
-import { MonoBehaviour } from "./mono-behaviour.js";
-import { GameStateManager } from "../scripts/managers/game-state-manager.js";
-import { QObject } from "./q-object.js";
-import { Component } from "./component.js";
+import { SpriteRenderer, BoxCollider, MonoBehaviour, QObject } from "./qbcreates-js-engine.js";
 
 export class Canvas {
     static #canvas = null;
@@ -52,10 +46,6 @@ export class Canvas {
     }
 
     static configureCanvas(canvasWidth, canvasHeight, ppu) {
-        GameStateManager.gameStateEvent.subscribe(isStarted => {
-            this.#play = true;
-        });
-
         this.#ppu = ppu;
         this.#canvas = document.createElement('canvas');
         this.#canvas.style = `border: 0px solid white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);`;
@@ -93,7 +83,7 @@ export class Canvas {
             gameObject[0].children.forEach(child => {
                 QObject.destroy(child);
             });
-            
+
             gameObject = null;
         }
     }

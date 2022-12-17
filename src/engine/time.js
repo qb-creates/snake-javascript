@@ -1,4 +1,4 @@
-import { Canvas } from "./canvas.js";
+import { Canvas } from "./qbcreates-js-engine.js";
 
 export class Time extends Canvas{
     static #fixedDeltaTime = 0.02;

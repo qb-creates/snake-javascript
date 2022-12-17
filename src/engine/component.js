@@ -1,4 +1,6 @@
-export class Component {
+import { QObject } from "./qbcreates-js-engine.js";
+
+export class Component  extends QObject{
     #transform = null;
     #enabled = true;
     #gameObject = null;
@@ -24,6 +26,7 @@ export class Component {
     }
 
     constructor(gameObject) {
+        super();
         this.#gameObject = gameObject;
         this.#transform = gameObject.transform;
     }

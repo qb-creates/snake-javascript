@@ -1,6 +1,6 @@
-import { Canvas, Component, Transform, SpriteRenderer, Vector2, BoxCollider } from "./qbcreates-js-engine.js";
+import { Canvas, Component, Transform, SpriteRenderer, Vector2, BoxCollider, QObject } from "./qbcreates-js-engine.js";
 
-export class GameObject {
+export class GameObject extends QObject {
     #objectName = '';
     #scriptList = [];
     #children = [];
@@ -9,7 +9,7 @@ export class GameObject {
     #layer = 0;
     #isActive = true;
     parent = null;
-    
+
     get objectName() {
         return this.#objectName;
     }
@@ -53,6 +53,7 @@ export class GameObject {
     }
 
     constructor(objectName) {
+        super();
         this.#objectName = objectName;
         this.#transform = new Transform(this)
         this.#scriptList.push(this.#transform);
