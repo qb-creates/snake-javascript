@@ -2,6 +2,7 @@
 import { MonoBehaviour, Canvas, Time, Input, KeyCode, Vector2, SpriteRenderer } from "../engine/qbcreates-js-engine.js";
 import { GameStateManager } from "./managers/game-state-manager.js";
 import { square } from "../engine/sprite-renderer.js";
+import { Physics2d } from "../engine/physics-2d.js";
 export class TestFollow extends MonoBehaviour {
     target = null;
     speed = 1;
@@ -34,8 +35,9 @@ export class TestFollow extends MonoBehaviour {
     animation = [];
     animationcount = 0;
     update() {
-
-
+        let direction = Vector2.subtract(Canvas.mousePosition, this.transform.position);
+        Physics2d.rayCast(this.transform.position, direction);
+        
         if (this.animationcount == 0) {
             this.gameObject.transform.scale = new Vector2(.8, .8);
         }

@@ -52,6 +52,7 @@ export class ${className} extends MonoBehaviour{
 }`
 
 // (B) WRITE TO FILE
+console.log(`./src/${scriptInfo.scriptLocation}/${scriptInfo.name}.js`)
 fs.writeFile(`./src/${scriptInfo.scriptLocation}/${scriptInfo.name}.js`, monoBehaviourTemplate, "utf8", (error, data) => {
     console.log("Write complete");
 });

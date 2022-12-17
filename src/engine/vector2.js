@@ -41,7 +41,7 @@ export class Vector2 {
         this.#x = x;
         this.#y = y;
     }
-
+    
     /**
      * Nomalizes the vector where its magnitude is equal to 1 unit.
      * @returns {Vector2} - Return the normalized Vector

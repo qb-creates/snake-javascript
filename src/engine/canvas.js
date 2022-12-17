@@ -1,4 +1,8 @@
-import { SpriteRenderer, BoxCollider, MonoBehaviour, QObject } from "./qbcreates-js-engine.js";
+import { SpriteRenderer } from "./sprite-renderer.js";
+import { BoxCollider } from "./box-collider.js";
+import { MonoBehaviour } from "./mono-behaviour.js";
+import { QObject } from "./q-object.js";
+import { Vector2 } from "./vector2.js";
 
 export class Canvas {
     static canvasUpdate = new rxjs.Subject();
@@ -8,6 +12,7 @@ export class Canvas {
     static #previousTimestamp = 0;
     static #gameObjectList = [];
     static #colliderList = [];
+    static #mousePosition = new Vector2(0, 0);
 
     static get canvasWidth() {
         return Canvas.#canvas.width;
@@ -22,7 +27,7 @@ export class Canvas {
     }
 
     static set canvasHeight(value) {
-        Canvas.#canvas.height = value;
+        this.#canvas.height = value;
     }
 
     static get ppu() {
@@ -34,7 +39,11 @@ export class Canvas {
     }
 
     static get context() {
-        return Canvas.#context;
+        return this.#context;
+    }
+
+    static get mousePosition() {
+        return this.#mousePosition;
     }
 
     constructor() {
@@ -56,8 +65,32 @@ export class Canvas {
         this.#canvas.width = canvasWidth;
         this.#canvas.height = canvasHeight;
         this.#context = this.#canvas.getContext('2d');
-        this.#context.transform(1, 0, 0, -1, 0, canvasHeight); // flips the axis
+
+        // Flips the Y axis. Makes it so that positive y values move north on the grid and negative values move south.
+        this.#context.transform(1, 0, 0, -1, 0, canvasHeight);
+
+        // Makes it so that (0, 0) is the center of our canvas
         this.#context.translate(canvasWidth / 2, canvasHeight / 2);
+
+        // Will be used to track our mouse position on the canvas.
+        this.#canvas.addEventListener("mousemove", function (evt) {
+            let rect = Canvas.#canvas.getBoundingClientRect();
+
+            // Find mouse X and Y coordinates on the canvas by subtracting the mouse's global 
+            // X and Y coordinates from the left and top location of the canvas.
+            let x = (evt.clientX - rect.left);
+            let y = (evt.clientY - rect.top);
+
+            // Center the x coordinate in the screen by subtracting half of the canvas width from the x coordinate.
+            x = (x - (Canvas.canvasWidth / 2)) / Canvas.ppu;
+
+            // Center the y coordinate in the screen by subtracting half of the canvas height from the y coordinate.
+            // Flip the y value direction by multiplying by -1.
+            y = -1 * (y - (Canvas.canvasHeight / 2)) / Canvas.ppu;
+
+            Canvas.#mousePosition = new Vector2(x, y);
+        }, false);
+
         document.body.appendChild(this.#canvas);
         requestAnimationFrame(this.#updateCanvas);
     }
@@ -110,7 +143,7 @@ export class Canvas {
         this.#collisionCheck();
         this.#drawGrid();
         // TODO set Time.delta dime equal to timestamp - previousTimestamp
-        // console.log(timestamp - this.#previousTimestamp);
+        // conasole.log(timestamp - this.#previousTimestamp);
         this.#previousTimestamp = timestamp;
         this.canvasUpdate.next();
         requestAnimationFrame(this.#updateCanvas);
