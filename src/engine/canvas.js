@@ -78,28 +78,30 @@ export class Canvas {
 
     static removeGameObject(gameObject) {
         gameObject.getComponents(BoxCollider).forEach(collider => {
-            let index = this.#colliderList.indexOf(collider);
+            let colliderIndex = this.#colliderList.indexOf(collider);
 
-            if (index >= 0) {
-                this.#colliderList.splice(index, 1);
+            if (colliderIndex >= 0) {
+                this.#colliderList.splice(colliderIndex, 1);
             }
         });
 
-        let index = this.#gameObjectList.indexOf(gameObject);
+        let gameObjectIndex = this.#gameObjectList.indexOf(gameObject);
 
-        if (index >= 0) {
-            let a = this.#gameObjectList.splice(index, 1);
+        if (gameObjectIndex >= 0) {
+            let gameObject = this.#gameObjectList.splice(gameObjectIndex, 1);
 
-            a[0].children.forEach(child => {
+            gameObject[0].children.forEach(child => {
                 QObject.destroy(child);
             });
-            a = null;
+            
+            gameObject = null;
         }
     }
 
     static #updateCanvas = (timestamp) => {
         this.#context.clearRect(-this.#canvas.width / 2, -this.#canvas.height / 2, this.#canvas.width, this.#canvas.height);
         this.#renderSprites(this.#gameObjectList);
+        this.#collisionCheck();
         this.#drawGrid();
         // TODO set Time.delta dime equal to timestamp - previousTimestamp
         // console.log(timestamp - this.#previousTimestamp);
@@ -107,19 +109,22 @@ export class Canvas {
         this.canvasUpdate.next();
         requestAnimationFrame(this.#updateCanvas);
     }
+
     static #drawGrid() {
         if (document.getElementById("grid").checked) {
-            for (let i = -20; i < 20; i++) {
-                for (let j = -20; j < 20; j++) {
-                    this.#context.strokeStyle = '#80808011';
+            let cellCount = this.canvasHeight / (this.ppu * 2);
 
+            for (let i = -cellCount; i < cellCount; i++) {
+                for (let j = -cellCount; j < cellCount; j++) {
+                    this.#context.strokeStyle = '#80808011';
                     this.#context.beginPath();
-                    this.#context.roundRect(i * 25, j * 25, 75, 75, [0]);
+                    this.#context.roundRect(i * this.ppu, j * this.ppu, this.ppu, this.ppu, [0]);
                     this.#context.stroke();
                 }
             }
         }
     }
+
     static #renderSprites(gameObjects) {
 
         // Sort the items by layer value.
@@ -135,9 +140,10 @@ export class Canvas {
                 renderer.sprite(renderer);
             }
         });
+    }
 
-        // Collision Check
-        this.#colliderList.forEach((collider, index) => {
+    static #collisionCheck() {
+        this.#colliderList.forEach((collider) => {
             let count = collider.collisionList.size;
 
             for (let i = 0; i < this.#colliderList.length; i++) {
@@ -145,7 +151,7 @@ export class Canvas {
                     collider.checkForCollision(this.#colliderList[i]);
                 }
             }
-            
+
             if (count < collider.collisionList.size) {
                 collider.gameObject.getComponents(MonoBehaviour).forEach(mono => {
                     mono.onTriggerEnter(collider.collisionList);

@@ -7,9 +7,10 @@ import { MonoBehaviour } from "./mono-behaviour.js";
 
 export class QObject {
     /**
-     * @param {GameObject} originalGameObject 
-     * @param {GameObject} parent 
-     * @param {Vector2} position 
+     * Clones the original gameObject and returns the clone
+     * @param {GameObject} originalGameObject - GameObject that will be cloned.
+     * @param {GameObject} parent - The gameObject the cloned object will become a child of.
+     * @param {Vector2} position - Starting position of the cloned object.
      * @returns 
      */
     static instantiate(originalGameObject, parent, position) {
@@ -35,10 +36,10 @@ export class QObject {
             if (!(script instanceof Transform)) {
                 let clonedScript = clonedObject.addComponent(script.constructor);
                 let propertyDescriptors = Object.getOwnPropertyDescriptors(script);
-  
+
                 Object.entries(propertyDescriptors).forEach(descriptor => {
                     let key = descriptor[0];
-                    let value = descriptor[1].value;                    
+                    let value = descriptor[1].value;
                     Reflect.set(clonedScript, key, value)
                 })
             }
@@ -60,41 +61,46 @@ export class QObject {
         return clonedObject;
     }
 
+    /**
+     * Creates an instance of a prefabe object.
+     * @param {*} prefab - The prefab object that we want to create.
+     * @returns 
+     */
+    static instantiatePrefabObject(prefab) {
+        let gameObject = new GameObject(prefab.objectName);
+        gameObject.layer = prefab.layer;
+        gameObject.transform.position = prefab.position;
+        gameObject.transform.scale = prefab.scale;
 
-    static instantiatePrefabObject(prefabObject) {
-        let gameObject = new GameObject(prefabObject.objectName);
-        gameObject.layer = prefabObject.layer;
-        gameObject.transform.position = prefabObject.position;
-        gameObject.transform.scale = prefabObject.scale;
-
-        prefabObject.children.forEach(childObject => {
-            let child = QObject.instantiatePrefabObject(childObject);
+        prefab.children.forEach(childPrefab => {
+            let child = QObject.instantiatePrefabObject(childPrefab);
             child.parent = gameObject;
             gameObject.children.push(child);
         });
 
-        prefabObject.components.forEach(componentObject => {
-            let component = gameObject.addComponent(componentObject.component);
+        prefab.components.forEach(componentPrefab => {
+            let component = gameObject.addComponent(componentPrefab.component);
 
-            for (var key in componentObject.properties) {
+            for (var key in componentPrefab.properties) {
                 if (gameObject[key] != 'undefined') {
-                    Reflect.set(component, key, componentObject.properties[key])
+                    Reflect.set(component, key, componentPrefab.properties[key])
                 }
             }
         });
+
         Canvas.addGameObject(gameObject);
         return gameObject;
     }
 
     /**
-     * 
-     * @param {GameObject | Component} object 
+     * Removes a gameObject component
+     * @param {GameObject} gameObject - The gameObject that will be removed.
      */
-    static destroy(object) {
-        Canvas.removeGameObject(object);
-        object.getComponents(MonoBehaviour).forEach(component => {
+    static destroy(gameObject) {
+        Canvas.removeGameObject(gameObject);
+        gameObject.getComponents(MonoBehaviour).forEach(component => {
             component.destroy();
         });
-        object.destroy();
+        gameObject.destroy();
     }
 }

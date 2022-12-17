@@ -9,6 +9,7 @@ export class GameObject {
     #layer = 0;
     #isActive = true;
     parent = null;
+    
     get objectName() {
         return this.#objectName;
     }
@@ -56,8 +57,8 @@ export class GameObject {
         this.#transform = new Transform(this)
         this.#scriptList.push(this.#transform);
     }
+
     destroy() {
-        // this.#scriptList = null;
         this.#isDestroyed = true;
     }
 
