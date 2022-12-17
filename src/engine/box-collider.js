@@ -24,6 +24,11 @@ export class BoxCollider extends Component {
         };
     }
 
+    /**
+     * The collider will determine if it overlaps with the input collider. R
+     * @param {BoxCollider} collider - The collider we want to check for overlap with.
+     * @returns {boolean} Returns true if the colliders overlap.
+     */
     checkForCollision(collider) {
         this.#previousListCount = this.#collisionList.size;
 
@@ -40,7 +45,7 @@ export class BoxCollider extends Component {
             if (this.#collisionList.has(collider.metaData)) {
                 this.#collisionList.delete(collider.metaData, collider);
             }
-            return;
+            return false;
         }
 
         // If one rectangle is on left side of other
@@ -48,20 +53,21 @@ export class BoxCollider extends Component {
             if (this.#collisionList.has(collider.metaData)) {
                 this.#collisionList.delete(collider.metaData, collider);
             }
-            return;
+            return false;
         }
 
-        // If one rectangle is above other
+        // If one rectangle is above the other
         if (r1.y > l2.y || r2.y > l1.y) {
             if (this.#collisionList.has(collider.metaData)) {
                 this.#collisionList.delete(collider.metaData, collider);
             }
-            return;
+            return false;
         }
 
         if (!this.#collisionList.has(collider.metaData)) {
             this.#collisionList.set(collider.metaData, collider);
         }
+        return true;
     }
 
     #onRender(x, y, scale) {

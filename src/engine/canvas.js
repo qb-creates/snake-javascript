@@ -1,15 +1,13 @@
 import { SpriteRenderer, BoxCollider, MonoBehaviour, QObject } from "./qbcreates-js-engine.js";
 
 export class Canvas {
+    static canvasUpdate = new rxjs.Subject();
     static #canvas = null;
     static #context = null;
     static #ppu = 25;
     static #previousTimestamp = 0;
     static #gameObjectList = [];
     static #colliderList = [];
-    static #play = false;
-    static canvasUpdate = new rxjs.Subject();
-    static event = new Event('canvasUpdate');
 
     static get canvasWidth() {
         return Canvas.#canvas.width;
@@ -45,6 +43,12 @@ export class Canvas {
         }
     }
 
+    /**
+     * Will set the size of the canvas and how many pixels are in one unit on the grid.
+     * @param {number} canvasWidth - Width of the canvas in pixels. 
+     * @param {number} canvasHeight - Height of the canvas in pixels.
+     * @param {number} ppu - Pixels Per Unit.
+     */
     static configureCanvas(canvasWidth, canvasHeight, ppu) {
         this.#ppu = ppu;
         this.#canvas = document.createElement('canvas');
@@ -58,14 +62,26 @@ export class Canvas {
         requestAnimationFrame(this.#updateCanvas);
     }
 
+    /**
+     * Adds a gameobject to the list of objects that need to be rendered.
+     * @param {GameObject} gameObject - The object the needs to be rendered.
+     */
     static addGameObject(gameObject) {
         this.#gameObjectList.push(gameObject);
     }
 
+    /**
+     * Will add the collider to the list of colliders that that are periodically compared against for collision detection.
+     * @param {BoxCollider} collider - The collider that needs to be added to the collider list. 
+     */
     static addCollider(collider) {
         this.#colliderList.push(collider);
     }
 
+    /**
+     * Removes a gameObject from the list of objects that need to be rendered
+     * @param {GameObject} gameObject - The object that needs to be removed.
+     */
     static removeGameObject(gameObject) {
         gameObject.getComponents(BoxCollider).forEach(collider => {
             let colliderIndex = this.#colliderList.indexOf(collider);

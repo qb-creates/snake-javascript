@@ -59,10 +59,17 @@ export class GameObject extends QObject {
         this.#scriptList.push(this.#transform);
     }
 
+    /**
+     * Marks the gameObject and all of its references as Destroyed.
+     */
     destroy() {
         this.#isDestroyed = true;
     }
 
+    /**
+     * Adds the input gameObect to this gameObjects list of children.
+     * @param {GameObject} gameObject 
+     */
     addGameObject(gameObject) {
         gameObject.parent = this;
         gameObject.transform.position = Vector2.add(gameObject.transform.position, this.transform.position);
@@ -73,6 +80,11 @@ export class GameObject extends QObject {
 
     }
 
+    /**
+     * Get a specific component from the gameObject. The first one listed will be returned.
+     * @param {*} componentClass 
+     * @returns The first one listed will be returned. Returns null if the script Type isn't found.
+     */
     getComponent(componentClass) {
         if (this.#scriptList) {
             return this.#scriptList.find(component => component instanceof componentClass);
@@ -80,6 +92,11 @@ export class GameObject extends QObject {
         return null;
     }
 
+    /**
+     * Get a specific component from the gameObject. A list of all instances will be returned.
+     * @param {*} componentClass - The class name of the component we want to get 
+     * @returns A list of all instances will be returned. Returns null if the script Type isn't found.
+     */
     getComponents(componentClass) {
         if (this.#scriptList) {
             return this.#scriptList.filter(component => component instanceof componentClass);

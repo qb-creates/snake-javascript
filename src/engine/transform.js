@@ -1,6 +1,6 @@
 import { Vector2, Component, BoxCollider } from "./qbcreates-js-engine.js";
 
-export class Transform extends Component{
+export class Transform extends Component {
     #position = new Vector2(0, 0);
     #scale = new Vector2(1, 1);
 
@@ -9,14 +9,15 @@ export class Transform extends Component{
     }
 
     set position(value) {
+        // Calculates the change in position and applies the difference to all attached colliders and children.
+        let distanceMoved = Vector2.subtract(value, this.#position);
+
         this.gameObject.getComponents(BoxCollider).forEach(collider => {
-            let distanceMoved = Vector2.subtract(value, this.#position);
             collider.position = Vector2.add(distanceMoved, collider.position);
         });
 
         this.gameObject.children.forEach(child => {
-            let distanceMoved = Vector2.subtract(value, this.#position);
-            child.transform.position = Vector2.add(distanceMoved, child.transform.position); 
+            child.transform.position = Vector2.add(distanceMoved, child.transform.position);
         });
         this.#position = value;
     }
@@ -26,14 +27,15 @@ export class Transform extends Component{
     }
 
     set scale(value) {
+        // Calculates the change in scale and applies the difference to all attached colliders and children.
+        let scaleDifference = Vector2.subtract(value, this.#scale);
+
         this.gameObject.getComponents(BoxCollider).forEach(collider => {
-            let scaleDifference = Vector2.subtract(value, this.#scale);
             collider.scale = Vector2.add(scaleDifference, collider.scale);
         });
 
         this.gameObject.children.forEach(child => {
-            let scaleDifference = Vector2.subtract(value, this.#scale);
-            child.transform.scale = Vector2.add(scaleDifference, child.transform.scale); 
+            child.transform.scale = Vector2.add(scaleDifference, child.transform.scale);
         });
         this.#scale = value;
     }

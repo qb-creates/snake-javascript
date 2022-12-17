@@ -43,8 +43,8 @@ export class Vector2 {
     }
 
     /**
-     * 
-     * @returns Return the vector normalized where its magnitude is equal to 1 unit.
+     * Nomalizes the vector where its magnitude is equal to 1 unit.
+     * @returns {Vector2} - Return the normalized Vector
      */
     normalize() {
         if (this.magnitude == 0) {
@@ -56,6 +56,12 @@ export class Vector2 {
         return new Vector2(xN, yN);
     }
 
+    /**
+     * Adds two Vector2 objects together and returns the result as a Vector2.
+     * @param {Vector2} vectorA 
+     * @param {Vector2} vectorB 
+     * @returns {Vector2} - Returns the sum of the two Vectors.
+     */
     static add(vectorA, vectorB) {
         let x = vectorA.x + vectorB.x;
         let y = vectorA.y + vectorB.y;
@@ -63,6 +69,12 @@ export class Vector2 {
         return new Vector2(x, y);
     }
 
+    /**
+     * Subtracts two Vector2 objects and returns the result as a Vector2.
+     * @param {Vector2} vectorA 
+     * @param {Vector2} vectorB 
+     * @returns {Vector2} - Returns the difference of the two Vectors.
+     */
     static subtract(vectorA, vectorB) {
         let x = vectorA.x - vectorB.x;
         let y = vectorA.y - vectorB.y;
@@ -70,6 +82,12 @@ export class Vector2 {
         return new Vector2(x, y);
     }
 
+    /**
+     * Multiplies the Vector2 by a number. Returns the result as a Vector.
+     * @param {Vector2} vectorA 
+     * @param {number} num 
+     * @returns Returns the product as a Vector2.
+     */
     static multiply(vectorA, num) {
         return new Vector2(vectorA.x * num, vectorA.y * num);
     }

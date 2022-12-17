@@ -26,18 +26,7 @@ export class MonoBehaviour extends Component {
             });
         });
     }
-    #CheckForDestroyedReferences() {
-        let propertyDescriptors = Object.getOwnPropertyDescriptors(this);
 
-        Object.entries(propertyDescriptors).forEach(descriptor => {
-            let key = descriptor[0];
-            let value = descriptor[1].value;
-
-            if (value instanceof GameObject && value.isDestroyed) {
-                Reflect.set(this, key, null)
-            }
-        })
-    }
     destroy() {
         this.#canvasUpdateSubscription.unsubscribe();
         clearInterval(this.#fixedUpdateInterval);
@@ -59,5 +48,18 @@ export class MonoBehaviour extends Component {
     }
 
     onTriggerExit() {
+    }
+
+    #CheckForDestroyedReferences() {
+        let propertyDescriptors = Object.getOwnPropertyDescriptors(this);
+
+        Object.entries(propertyDescriptors).forEach(descriptor => {
+            let key = descriptor[0];
+            let value = descriptor[1].value;
+
+            if (value instanceof GameObject && value.isDestroyed) {
+                Reflect.set(this, key, null)
+            }
+        })
     }
 }
