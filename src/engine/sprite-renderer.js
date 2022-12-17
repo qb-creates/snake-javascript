@@ -9,11 +9,6 @@ export class SpriteRenderer extends Component {
     constructor(gameObject) {
         super(gameObject);
     }
-
-    clone(renderer) {
-        renderer.sprite = this.sprite;
-        renderer.color = this.color;
-    }
 }
 
 export function square(x, y, color, borderColor, scale = new Vector2(1, 1)) {

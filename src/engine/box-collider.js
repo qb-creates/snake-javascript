@@ -1,11 +1,11 @@
 import { Component, Vector2, Canvas } from "./qbcreates-js-engine.js";
 
 export class BoxCollider extends Component {
-    collisionList = new Map();
     position = new Vector2(0, 0);
     scale = new Vector2(1, 1);
     #render = null;
     #metaData = '';
+    #collisionList = new Map();
     #previousListCount = 0;
 
     get render() {
@@ -14,6 +14,10 @@ export class BoxCollider extends Component {
 
     get metaData() {
         return this.#metaData;
+    }
+
+    get collisionList() {
+        return new Map(this.#collisionList);
     }
 
     constructor(gameObject) {
@@ -27,51 +31,42 @@ export class BoxCollider extends Component {
     }
 
     checkForCollision(collider) {
-        // Saves the current 
-        this.#previousListCount = this.collisionList.size;
+        this.#previousListCount = this.#collisionList.size;
 
+        // Get the top left corner coordinates of the box
         let l1 = new Vector2((this.position.x - .5) - (this.scale.x / 2), (this.position.y - .5) + (this.scale.y / 2));
         let r1 = new Vector2((this.position.x - .5) + (this.scale.x / 2), (this.position.y - .5) - (this.scale.y / 2));
+
+        // Get the bottom right coordinates of the box
         let l2 = new Vector2((collider.position.x - .5) - (collider.scale.x / 2), (collider.position.y - .5) + (collider.scale.y / 2));
         let r2 = new Vector2((collider.position.x - .5) + (collider.scale.x / 2), (collider.position.y - .5) - (collider.scale.y / 2));
 
         // if rectangle has area 0, no overlap
-        if (l1.x == r1.x || l1.y == r1.y || r2.x == l2.x || l2.y == r2.y) {
-            if (this.collisionList.has(collider.metaData)) {
-                this.collisionList.delete(collider.metaData, collider);
+        if ((l1.x == r1.x || l1.y == r1.y || r2.x == l2.x || l2.y == r2.y)) {
+            if (this.#collisionList.has(collider.metaData)) {
+                this.#collisionList.delete(collider.metaData, collider);
             }
             return;
         }
 
         // If one rectangle is on left side of other
         if (l1.x > r2.x || l2.x > r1.x) {
-            if (this.collisionList.has(collider.metaData)) {
-                this.collisionList.delete(collider.metaData, collider);
+            if (this.#collisionList.has(collider.metaData)) {
+                this.#collisionList.delete(collider.metaData, collider);
             }
             return;
         }
 
         // If one rectangle is above other
         if (r1.y > l2.y || r2.y > l1.y) {
-            if (this.collisionList.has(collider.metaData)) {
-                this.collisionList.delete(collider.metaData, collider);
+            if (this.#collisionList.has(collider.metaData)) {
+                this.#collisionList.delete(collider.metaData, collider);
             }
             return;
         }
 
-        if (!this.collisionList.has(collider.metaData)) {
-            this.collisionList.set(collider.metaData, collider);
-        }
-    }
-    
-    /**
-     * 
-     * @param {BoxCollider} collider 
-     */
-    clone(collider) {
-        if (collider instanceof BoxCollider) {
-            collider.position = new Vector2(this.position.x, this.position.y);
-            collider.scale = new Vector2(this.scale.x, this.scale.y);
+        if (!this.#collisionList.has(collider.metaData)) {
+            this.#collisionList.set(collider.metaData, collider);
         }
     }
 

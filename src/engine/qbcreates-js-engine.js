@@ -8,5 +8,5 @@ export { GameObject } from "./game-object.js";
 export { Component } from "./component.js";
 export { Transform } from "./transform.js";
 export { SpriteRenderer } from "./sprite-renderer.js";
-export { Objects as Object } from "./object.js";
+export { QObject } from "./q-object.js";
 export { BoxCollider } from "./box-collider.js";

@@ -1,5 +1,5 @@
 
-import { MonoBehaviour, Canvas, Input, KeyCode, Vector2, BoxCollider, SpriteRenderer, Object } from "../../engine/qbcreates-js-engine.js";
+import { MonoBehaviour, Canvas, Input, KeyCode, Vector2, BoxCollider, SpriteRenderer, QObject } from "../../engine/qbcreates-js-engine.js";
 import { ScoreManager } from "../managers/score-manager.js";
 import { SnakeSize } from "../snake/snake-exports.js";
 
@@ -38,8 +38,8 @@ export class AppleBehaviour extends MonoBehaviour {
             if (collider.gameObject.objectName.includes('snake')) {
                 ScoreManager.addPoint();
                 collider.gameObject.parent.getComponent(SnakeSize).grow();
-                Object.instantiate(this.gameObject);
-                Object.destroy(this.gameObject);
+                QObject.instantiate(this.gameObject);
+                QObject.destroy(this.gameObject);
                 return;
             }
         })

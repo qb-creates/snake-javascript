@@ -3,7 +3,7 @@ import { SpriteRenderer } from "./sprite-renderer.js";
 import { BoxCollider } from "./box-collider.js";
 import { MonoBehaviour } from "./mono-behaviour.js";
 import { GameStateManager } from "../scripts/managers/game-state-manager.js";
-import { Objects } from "./object.js";
+import { QObject } from "./q-object.js";
 import { Component } from "./component.js";
 
 export class Canvas {
@@ -91,7 +91,7 @@ export class Canvas {
             let a = this.#gameObjectList.splice(index, 1);
 
             a[0].children.forEach(child => {
-                Objects.destroy(child);
+                QObject.destroy(child);
             });
             a = null;
         }
@@ -128,7 +128,7 @@ export class Canvas {
         });
 
         // Render Sprites
-        gameObjects.forEach((gameObject, index) => {
+        gameObjects.forEach((gameObject) => {
             let renderer = gameObject.getComponent(SpriteRenderer);
 
             if (renderer) {
@@ -138,16 +138,14 @@ export class Canvas {
 
         // Collision Check
         this.#colliderList.forEach((collider, index) => {
-            if (document.getElementById("colliders").checked) {
-                collider.render();
-            }
             let count = collider.collisionList.size;
+
             for (let i = 0; i < this.#colliderList.length; i++) {
                 if (collider != this.#colliderList[i]) {
                     collider.checkForCollision(this.#colliderList[i]);
                 }
             }
-
+            
             if (count < collider.collisionList.size) {
                 collider.gameObject.getComponents(MonoBehaviour).forEach(mono => {
                     mono.onTriggerEnter(collider.collisionList);
@@ -156,6 +154,11 @@ export class Canvas {
                 collider.gameObject.getComponents(MonoBehaviour).forEach(mono => {
                     mono.onTriggerExit(collider.collisionList);
                 });
+            }
+
+            // Render Colliders
+            if (document.getElementById("colliders").checked) {
+                collider.render();
             }
         });
     }

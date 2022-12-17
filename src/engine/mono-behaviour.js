@@ -30,7 +30,9 @@ export class MonoBehaviour extends Component {
         });
     }
     #CheckForDestroyedReferences() {
-        Object.entries(Object.getOwnPropertyDescriptors(this)).forEach(descriptor => {
+        let propertyDescriptors = Object.getOwnPropertyDescriptors(this);
+
+        Object.entries(propertyDescriptors).forEach(descriptor => {
             let key = descriptor[0];
             let value = descriptor[1].value;
 
@@ -60,8 +62,5 @@ export class MonoBehaviour extends Component {
     }
 
     onTriggerExit() {
-    }
-
-    clone() {
     }
 }

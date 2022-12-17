@@ -1,6 +1,11 @@
-import { GameObject, Vector2, Component, Transform, Canvas, MonoBehaviour, SpriteRenderer } from "./qbcreates-js-engine.js";
-import { square } from "./sprite-renderer.js";
-export class Objects {
+import { GameObject } from "./game-object.js";
+import { Vector2 } from "./vector2.js";
+import { Component } from "./component.js";
+import { Transform } from "./transform.js";
+import { Canvas } from "./canvas.js";
+import { MonoBehaviour } from "./mono-behaviour.js";
+
+export class QObject {
     /**
      * @param {GameObject} originalGameObject 
      * @param {GameObject} parent 
@@ -8,19 +13,34 @@ export class Objects {
      * @returns 
      */
     static instantiate(originalGameObject, parent, position) {
-        let clonedObject = new GameObject(originalGameObject.objectName + " (clone)");
+        // let underscorIndex = originalGameObject.objectName.lastIndexOf('_');
+        // let newName = originalGameObject.objectName + '_1';
+
+        // if (underscorIndex != -1) {
+        //     cloneNumber = '_' + Number(originalGameObject.objectName.substring(underscorIndex + 1)) + 1;
+        //     newName = originalGameObject.objectName.
+        //     let a ='sdf'
+        //     a.
+        // }
+        let clonedObject = new GameObject(originalGameObject.objectName);
         clonedObject.layer = originalGameObject.layer;
         clonedObject.transform.position = new Vector2(originalGameObject.transform.position.x, originalGameObject.transform.position.y);
         clonedObject.transform.scale = new Vector2(originalGameObject.transform.scale.x, originalGameObject.transform.scale.y);
 
         originalGameObject.children.forEach(child => {
-            Objects.instantiate(child, clonedObject);
+            QObject.instantiate(child, clonedObject);
         });
 
         originalGameObject.getComponents(Component).forEach(script => {
             if (!(script instanceof Transform)) {
                 let clonedScript = clonedObject.addComponent(script.constructor);
-                script.clone(clonedScript);
+                let propertyDescriptors = Object.getOwnPropertyDescriptors(script);
+  
+                Object.entries(propertyDescriptors).forEach(descriptor => {
+                    let key = descriptor[0];
+                    let value = descriptor[1].value;                    
+                    Reflect.set(clonedScript, key, value)
+                })
             }
         });
 
@@ -48,7 +68,7 @@ export class Objects {
         gameObject.transform.scale = prefabObject.scale;
 
         prefabObject.children.forEach(childObject => {
-            let child = Objects.instantiatePrefabObject(childObject);
+            let child = QObject.instantiatePrefabObject(childObject);
             child.parent = gameObject;
             gameObject.children.push(child);
         });
@@ -65,22 +85,6 @@ export class Objects {
         Canvas.addGameObject(gameObject);
         return gameObject;
     }
-    
-    // let test = {
-    //     children: [],
-    //     layer: 2,
-    //     objectName: 'enemy',
-    //     position: new Vector2(-5, 5),
-    //     scale: new Vector2(1, 1),
-    //     components: []
-    //   }
-    //   let a = {
-    //     component: SpriteRenderer,
-    //     color: snakeHeadColor,
-    //     sprite: (renderer) => {
-    //       square(renderer.transform.position.x, renderer.transform.position.y, renderer.color, 'transparent', renderer.transform.scale);
-    //     }
-    //   };
 
     /**
      * 
